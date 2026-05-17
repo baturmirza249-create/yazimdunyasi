@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YazımDünyası – Türkçe Öğrenme Platformu</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdf6ec;--bg2:#fff9f2;--card:#ffffff;--accent:#e07b39;--accent2:#2d6a4f;
+  --navy:#1a2e44;--text:#1a1a2e;--muted:#7a7a8c;--border:#e8ddd0;
+  --shadow:0 4px 24px rgba(0,0,0,0.08);--shadow-lg:0 12px 48px rgba(0,0,0,0.14);
+  --radius:18px;--green:#2d6a4f;--red:#c0392b;--tdk:#1a5276;--tdk-light:#d6eaf8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Baloo 2',cursive;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── GİRİŞ EKRANI ── */
+#giris-ekrani{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.giris-logo{font-size:3.2rem;color:#f5a623;font-weight:800;animation:belir .6s ease;}
+.giris-logo span{color:var(--accent);}
+.giris-alt{color:#a0aec0;margin:6px 0 28px;font-size:1rem;}
+.giris-kutu{background:#243556;border:1px solid #344a6a;border-radius:20px;padding:32px 36px;width:380px;max-width:92vw;}
+.giris-kutu h2{color:#f5a623;font-size:1.35rem;margin-bottom:4px;}
+.giris-kutu p{color:#a0aec0;font-size:0.85rem;margin-bottom:20px;}
+.giris-sekmeler{display:flex;gap:8px;margin-bottom:18px;}
+.giris-sekme{flex:1;padding:8px;border-radius:10px;border:2px solid #344a6a;background:transparent;color:#a0aec0;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.88rem;transition:all .2s;}
+.giris-sekme.aktif{border-color:#f5a623;color:#f5a623;background:rgba(245,166,35,0.1);}
+.giris-panel{display:none;}
+.giris-panel.aktif{display:block;}
+.giris-link{color:#a0aec0;font-size:0.82rem;margin-top:12px;text-align:center;}
+.giris-link a{color:#f5a623;cursor:pointer;text-decoration:underline;}
+.giris-uyari{color:#fc8181;font-size:0.82rem;margin-top:8px;min-height:18px;text-align:center;}
+.girdi{width:100%;padding:10px 13px;background:#1a2e44;border:2px solid #344a6a;border-radius:10px;color:#fff;font-family:'Baloo 2',cursive;font-size:0.92rem;margin-bottom:10px;transition:border .2s;}
+.girdi:focus{outline:none;border-color:#f5a623;}
+.girdi::placeholder{color:#5a6a7a;}
+.btn{padding:11px 26px;border-radius:30px;border:none;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:0.92rem;transition:all .2s;text-transform:uppercase;letter-spacing:.5px;}
+.btn-altin{background:#f5a623;color:#000;width:100%;}
+.btn-altin:hover{background:#ffb83d;transform:translateY(-1px);}
+.btn-yesil{background:var(--accent2);color:#fff;}
+.btn-yesil:hover{background:#1b5e40;transform:translateY(-1px);}
+.btn-cerceve{background:transparent;border:2px solid var(--accent);color:var(--accent);}
+.btn-cerceve:hover{background:rgba(224,123,57,0.1);}
+.btn-kirmizi{background:var(--red);color:#fff;}
+.btn-kucuk{padding:7px 15px;font-size:0.8rem;}
+@keyframes belir{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+
+/* ── ÜST BAŞLIK ── */
+header{background:var(--navy);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.15);}
+.logo{font-family:'Baloo 2',cursive;font-size:1.6rem;font-weight:800;color:#f5a623;}
+.logo span{color:var(--accent);}
+.kullanici-bilgi{display:flex;align-items:center;gap:8px;color:#a0aec0;font-size:0.85rem;}
+.kullanici-bilgi strong{color:#f5a623;}
+.puan-rozet{background:rgba(245,166,35,0.15);color:#f5a623;padding:3px 10px;border-radius:12px;font-weight:800;font-size:0.8rem;}
+.kullanici-bilgi button{background:transparent;border:1px solid #344a6a;color:#a0aec0;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:'Baloo 2',cursive;font-size:0.78rem;transition:all .2s;}
+.kullanici-bilgi button:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── GEZİNME ── */
+nav{background:var(--card);border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto;}
+.nav-btn{padding:13px 16px;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.88rem;color:var(--muted);white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+.nav-btn:hover{color:var(--accent);}
+.nav-btn.aktif{color:var(--accent);border-bottom-color:var(--accent);}
+.nav-btn.tdk-nav{color:var(--tdk);}
+.nav-btn.tdk-nav.aktif{color:var(--tdk);border-bottom-color:var(--tdk);}
+.nav-btn.yonetici-nav{color:var(--red);}
+.nav-btn.yonetici-nav.aktif{border-bottom-color:var(--red);}
+
+/* ── SAYFALAR ── */
+.sayfa{display:none;padding:28px 24px;max-width:1280px;margin:0 auto;animation:goster .3s ease;}
+.sayfa.aktif{display:block;}
+@keyframes goster{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.bolum-baslik{font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:5px;}
+.bolum-alt{color:var(--muted);font-size:0.88rem;margin-bottom:24px;}
+
+/* ── ANA SAYFA ── */
+.kahraman{background:linear-gradient(135deg,var(--navy),#2d4a6e);border-radius:22px;padding:48px 36px;margin-bottom:32px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;position:relative;overflow:hidden;}
+.kahraman::before{content:'';position:absolute;right:-50px;top:-50px;width:260px;height:260px;background:radial-gradient(circle,rgba(245,166,35,0.12),transparent);border-radius:50%;}
+.kahraman-yazi h1{font-size:2.5rem;color:#fff;line-height:1.15;margin-bottom:10px;}
+.kahraman-yazi h1 span{color:#f5a623;}
+.kahraman-yazi p{color:#a0c4ff;font-size:1rem;margin-bottom:20px;max-width:500px;}
+.kahraman-butonlar{display:flex;gap:10px;flex-wrap:wrap;}
+.kahraman-emoji{font-size:6rem;opacity:.85;}
+.istatistik-satir{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;}
+.istatistik-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow);}
+.istatistik-sayi{font-size:2rem;font-weight:800;}
+.istatistik-etiket{color:var(--muted);font-size:0.78rem;margin-top:2px;}
+.ana-izgara{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;}
+.ana-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;cursor:pointer;transition:all .22s;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.ana-kart::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.ana-kart:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent);}
+.ana-kart .kart-ikon{font-size:2rem;margin-bottom:8px;}
+.ana-kart h3{font-size:0.95rem;font-weight:800;margin-bottom:3px;}
+.ana-kart p{font-size:0.78rem;color:var(--muted);}
+
+/* ── HABERLER ── */
+.haber-bolum{margin-top:36px;}
+.haber-izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.haber-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:all .22s;position:relative;overflow:hidden;}
+.haber-kart::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--tdk),var(--accent));}
+.haber-kart:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.haber-tarih{font-size:0.72rem;color:var(--muted);margin-bottom:6px;}
+.haber-kart h3{font-size:0.95rem;font-weight:800;margin-bottom:6px;color:var(--navy);}
+.haber-kart p{font-size:0.82rem;color:var(--muted);line-height:1.5;font-family:'Lora',serif;}
+.haber-etiket{display:inline-block;background:var(--tdk-light);color:var(--tdk);padding:2px 9px;border-radius:20px;font-size:0.7rem;font-weight:700;margin-bottom:6px;}
+.haber-yok{text-align:center;padding:36px;color:var(--muted);background:var(--card);border-radius:var(--radius);border:1px dashed var(--border);}
+
+/* ── KONULAR ── */
+.konu-sekmeler{display:flex;gap:8px;margin-bottom:22px;}
+.konu-sekme{padding:9px 22px;border-radius:20px;border:2px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.9rem;transition:all .2s;}
+.konu-sekme.aktif{border-color:var(--accent);color:var(--accent);background:rgba(224,123,57,0.08);}
+.konu-alan{display:none;}
+.konu-alan.aktif{display:block;animation:goster .3s ease;}
+.konu-duzen{display:grid;grid-template-columns:230px 1fr;gap:22px;align-items:start;}
+.konu-kenar{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:sticky;top:76px;box-shadow:var(--shadow);}
+.konu-kenar h3{font-size:0.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;}
+.konu-baglanti{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 13px;border-radius:11px;cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.88rem;color:var(--text);margin-bottom:3px;}
+.konu-baglanti:hover{background:var(--bg);color:var(--accent);}
+.konu-baglanti.aktif{background:rgba(224,123,57,0.1);color:var(--accent);border-left:3px solid var(--accent);}
+
+/* içerik blokları */
+.icerik-blok{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:18px;box-shadow:var(--shadow);position:relative;}
+.ib-yonetici-bar{display:none;position:absolute;top:14px;right:14px;gap:6px;}
+.yonetici-giris .icerik-blok:hover .ib-yonetici-bar{display:flex;}
+.ib-btn{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:0.72rem;font-weight:700;font-family:'Baloo 2',cursive;transition:all .2s;}
+.ib-btn.duzenle:hover{border-color:var(--accent);color:var(--accent);}
+.ib-btn.sil:hover{border-color:var(--red);color:var(--red);}
+.icerik-blok h3{color:var(--accent);font-size:1.05rem;margin-bottom:11px;}
+.kural-liste{list-style:none;}
+.kural-liste li{padding:6px 0;display:flex;gap:9px;font-size:0.94rem;line-height:1.6;border-bottom:1px solid var(--bg);font-family:'Lora',serif;}
+.kural-liste li:last-child{border-bottom:none;}
+.kural-liste li::before{content:'▸';color:var(--accent);flex-shrink:0;margin-top:2px;}
+.ornek-kutu{background:var(--bg);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 11px 11px 0;margin-top:12px;font-family:'Lora',serif;font-size:0.92rem;line-height:1.65;}
+.ornek-dogru{color:var(--green);}
+.ornek-yanlis{color:var(--red);}
+.not-kutu{background:#fff8e1;border:1px solid #f5a623;border-radius:11px;padding:12px 16px;margin-top:12px;font-size:0.85rem;color:#7a5c00;}
+.mini-karikatur{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#fff9f2,#fdf0e4);border:1px solid var(--border);border-radius:13px;padding:14px 18px;margin-top:14px;}
+.mk-emoji{font-size:2.6rem;flex-shrink:0;}
+.mk-balon{background:#fff;border:1px solid var(--border);border-radius:11px;padding:9px 13px;font-size:0.83rem;font-family:'Lora',serif;line-height:1.5;color:var(--text);}
+.karsilastirma-tablo{width:100%;border-collapse:collapse;margin-top:12px;font-family:'Lora',serif;}
+.karsilastirma-tablo th{background:var(--navy);color:#fff;padding:9px 13px;text-align:left;font-family:'Baloo 2',cursive;font-size:0.88rem;}
+.karsilastirma-tablo td{padding:9px 13px;border-bottom:1px solid var(--border);font-size:0.88rem;line-height:1.45;}
+.karsilastirma-tablo tr:nth-child(even){background:var(--bg);}
+.karsilastirma-tablo .yanlis{color:var(--red);font-weight:700;}
+.karsilastirma-tablo .dogru{color:var(--green);font-weight:700;}
+
+/* ── TDK ── */
+.tdk-kahraman{background:linear-gradient(135deg,var(--tdk),#2471a3);border-radius:22px;padding:36px;margin-bottom:28px;color:#fff;position:relative;overflow:hidden;}
+.tdk-kahraman::before{content:'';position:absolute;right:-35px;top:-35px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,0.1),transparent);border-radius:50%;}
+.tdk-kahraman h1{font-size:2rem;margin-bottom:6px;}
+.tdk-kahraman p{color:#a9cce3;font-size:0.95rem;max-width:480px;}
+.tdk-sekmeler{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.tdk-sekme{padding:9px 20px;border-radius:20px;border:2px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.9rem;transition:all .2s;}
+.tdk-sekme.aktif,.tdk-sekme:hover{border-color:var(--tdk);color:var(--tdk);background:var(--tdk-light);}
+.tdk-bolum{display:none;}
+.tdk-bolum.aktif{display:block;animation:goster .3s ease;}
+
+/* ── KARİKATÜRLER ── */
+.karikatur-galerisi{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;}
+.karikatur-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:all .22s;cursor:pointer;}
+.karikatur-kart:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent);}
+.karikatur-resim{width:100%;height:240px;background:linear-gradient(135deg,#1a2e44,#2d4a6e);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.karikatur-resim img{width:100%;height:100%;object-fit:cover;}
+.karikatur-bilgi{padding:16px 18px;}
+.karikatur-konu{font-size:0.72rem;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:3px;}
+.karikatur-bilgi h3{font-size:0.95rem;font-weight:800;margin-bottom:5px;}
+.karikatur-bilgi p{font-size:0.82rem;color:var(--muted);line-height:1.45;}
+.karikatur-filtre{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px;}
+.filtre-btn{padding:6px 14px;border-radius:20px;border:2px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.8rem;transition:all .2s;}
+.filtre-btn.aktif,.filtre-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(224,123,57,0.08);}
+
+/* büyük görsel */
+#buyuk-gorsel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;}
+#buyuk-gorsel.acik{display:flex;}
+.bg-ic{background:var(--card);border-radius:18px;max-width:660px;width:90%;max-height:90vh;overflow-y:auto;position:relative;}
+.bg-kapat{position:absolute;top:12px;right:12px;background:var(--bg);border:none;border-radius:50%;width:34px;height:34px;font-size:1.1rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;}
+.bg-resim{width:100%;height:320px;background:linear-gradient(135deg,#1a2e44,#2d4a6e);border-radius:18px 18px 0 0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.bg-resim img{width:100%;height:100%;object-fit:cover;border-radius:18px 18px 0 0;}
+.bg-govde{padding:22px;}
+.bg-govde h2{font-size:1.2rem;margin-bottom:7px;}
+.bg-govde p{color:var(--muted);line-height:1.65;font-family:'Lora',serif;font-size:0.92rem;}
+.bg-altyazi{font-size:0.85rem;background:var(--bg);border-radius:9px;padding:9px 13px;margin-top:9px;color:var(--text);font-family:'Lora',serif;font-style:italic;}
+
+/* ── SINAV ── */
+.sinav-baslangic{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px;text-align:center;box-shadow:var(--shadow);max-width:580px;margin:0 auto;}
+.sinav-baslangic h2{font-size:1.5rem;color:var(--navy);margin-bottom:7px;}
+.sinav-secenekler{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px;text-align:left;}
+.sinav-grup{background:var(--bg);border-radius:11px;padding:14px;}
+.sinav-grup label:first-child{display:block;font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;}
+.sinav-secim{display:flex;align-items:center;gap:7px;margin-bottom:5px;cursor:pointer;font-size:0.85rem;font-family:'Baloo 2',cursive;font-weight:600;}
+.sinav-secim input{accent-color:var(--accent);}
+.sinav-sayi{width:100%;padding:7px 11px;border:2px solid var(--border);border-radius:9px;font-family:'Baloo 2',cursive;font-size:0.88rem;background:var(--card);color:var(--text);}
+.sinav-sar{max-width:720px;margin:0 auto;}
+.sinav-ust{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.puan-hap{background:var(--navy);color:#f5a623;padding:7px 18px;border-radius:20px;font-weight:800;font-size:0.88rem;}
+.ilerleme-sar{margin-bottom:24px;}
+.ilerleme-etiket{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--muted);margin-bottom:5px;}
+.ilerleme-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.ilerleme-dolu{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s;}
+.soru-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+.soru-meta{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.rozet{padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;}
+.rozet-konu{background:rgba(224,123,57,0.12);color:var(--accent);border:1px solid rgba(224,123,57,0.3);}
+.rozet-zorluk{background:rgba(45,106,79,0.12);color:var(--accent2);border:1px solid rgba(45,106,79,0.3);}
+.rozet-tip{background:rgba(26,82,118,0.12);color:var(--tdk);border:1px solid rgba(26,82,118,0.3);}
+.soru-metin{font-size:1.05rem;font-weight:700;margin-bottom:20px;line-height:1.5;font-family:'Lora',serif;}
+.secenekler{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.secenekler.dy-secenekler{grid-template-columns:1fr 1fr;max-width:320px;}
+.secenek{background:var(--bg);border:2px solid var(--border);border-radius:13px;padding:12px 16px;cursor:pointer;text-align:left;font-family:'Baloo 2',cursive;font-size:0.9rem;font-weight:600;color:var(--text);transition:all .2s;}
+.secenek:hover:not(:disabled){border-color:var(--accent);background:rgba(224,123,57,0.07);}
+.secenek.dogru{border-color:var(--green);background:rgba(45,106,79,0.1);color:var(--green);}
+.secenek.yanlis{border-color:var(--red);background:rgba(192,57,43,0.08);color:var(--red);}
+.secenek:disabled{cursor:default;}
+.aciklama{margin-top:16px;padding:12px 16px;border-radius:11px;background:#fff8e1;border:1px solid #f5a623;color:#5a3e00;font-size:0.88rem;display:none;font-family:'Lora',serif;line-height:1.6;}
+.aciklama.goster{display:block;animation:goster .3s ease;}
+.soru-eylemler{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;}
+
+/* ── PERFORMANS ── */
+.performans-izgara{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:28px;}
+.performans-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;text-align:center;box-shadow:var(--shadow);}
+.performans-sayi{font-size:2.4rem;font-weight:800;}
+.performans-etiket{color:var(--muted);font-size:0.78rem;}
+.performans-detay{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.konu-bar-sar{margin:9px 0;}
+.kbs-etiket{display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px;}
+.kbs-bar{height:11px;background:var(--border);border-radius:5px;overflow:hidden;}
+.kbs-dolu{height:100%;border-radius:5px;transition:width .6s;}
+.dolu-guclu{background:linear-gradient(90deg,#2d6a4f,#40c087);}
+.dolu-orta{background:linear-gradient(90deg,#e07b39,#f5a623);}
+.dolu-zayif{background:linear-gradient(90deg,#c0392b,#e74c3c);}
+.oneri-madde{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:13px 16px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start;box-shadow:var(--shadow);}
+.oneri-ikon{font-size:1.4rem;flex-shrink:0;}
+.oneri-baslik{font-weight:800;font-size:0.9rem;}
+.oneri-metin{font-size:0.8rem;color:var(--muted);margin-top:2px;}
+
+/* ── YÖNETİCİ ── */
+.yonetici-duzen{display:grid;grid-template-columns:210px 1fr;gap:22px;}
+.yonetici-kenar{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;height:fit-content;position:sticky;top:76px;box-shadow:var(--shadow);}
+.yonetici-kenar h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
+.yk-btn{display:block;width:100%;text-align:left;padding:9px 13px;background:transparent;border:none;border-radius:9px;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:0.85rem;color:var(--text);margin-bottom:2px;transition:all .2s;}
+.yk-btn:hover,.yk-btn.aktif{background:rgba(192,57,43,0.08);color:var(--red);}
+.yonetici-panel{display:none;}
+.yonetici-panel.aktif{display:block;animation:goster .3s ease;}
+.yonetici-panel h2{font-size:1.35rem;font-weight:800;color:var(--navy);margin-bottom:18px;}
+.form-alan{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:18px;box-shadow:var(--shadow);}
+.form-grup{margin-bottom:14px;}
+.form-grup label{display:block;font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.form-grup input,.form-grup select,.form-grup textarea{width:100%;padding:10px 13px;background:var(--bg);border:2px solid var(--border);border-radius:9px;color:var(--text);font-family:'Baloo 2',cursive;font-size:0.9rem;transition:border .2s;}
+.form-grup input:focus,.form-grup select:focus,.form-grup textarea:focus{outline:none;border-color:var(--accent);}
+.form-grup textarea{min-height:76px;resize:vertical;}
+.form-cift{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.secenek-duzenle{display:grid;gap:7px;margin-top:7px;}
+.secenek-satir{display:flex;gap:7px;align-items:center;}
+.secenek-harf{font-size:0.78rem;font-weight:700;color:var(--muted);width:22px;text-align:center;flex-shrink:0;}
+.secenek-satir input{flex:1;}
+.dogru-etiket{display:flex;align-items:center;gap:4px;font-size:0.78rem;font-weight:700;color:var(--green);cursor:pointer;white-space:nowrap;}
+.dogru-etiket input{accent-color:var(--green);}
+.liste-kart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
+.liste-kart h3{font-size:0.88rem;color:var(--muted);margin-bottom:14px;}
+.liste-madde{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--bg);border-radius:9px;margin-bottom:7px;border:1px solid var(--border);}
+.liste-madde-metin .lm-ust{font-size:0.7rem;color:var(--accent);font-weight:700;text-transform:uppercase;}
+.liste-madde-metin .lm-ana{font-size:0.85rem;margin-top:2px;}
+.liste-eylemler{display:flex;gap:5px;}
+.eylem-btn{background:transparent;border:1px solid var(--border);border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:all .2s;}
+.eylem-btn.sil:hover{border-color:var(--red);background:rgba(192,57,43,0.08);}
+.eylem-btn.duzenle:hover{border-color:var(--accent);background:rgba(224,123,57,0.08);}
+.bildirim{padding:10px 14px;border-radius:9px;font-weight:700;font-size:0.85rem;margin-bottom:12px;display:none;}
+.bildirim.tamam{background:rgba(45,106,79,0.1);border:1px solid var(--green);color:var(--green);display:block;}
+.bildirim.hata{background:rgba(192,57,43,0.08);border:1px solid var(--red);color:var(--red);display:block;}
+.yukle-alan{border:2px dashed var(--border);border-radius:13px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;margin-top:7px;}
+.yukle-alan:hover{border-color:var(--accent);background:rgba(224,123,57,0.04);}
+.yukle-alan input{display:none;}
+.yukle-onizleme{width:100%;height:130px;object-fit:cover;border-radius:9px;margin-top:9px;}
+
+@media(max-width:900px){
+  .konu-duzen{grid-template-columns:1fr;}
+  .konu-kenar{position:static;}
+  .yonetici-duzen{grid-template-columns:1fr;}
+  .yonetici-kenar{position:static;}
+  .performans-detay{grid-template-columns:1fr;}
+  .sinav-secenekler{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .kahraman{grid-template-columns:1fr;padding:32px 22px;}
+  .kahraman-emoji{display:none;}
+  .istatistik-satir{grid-template-columns:repeat(2,1fr);}
+  .secenekler{grid-template-columns:1fr;}
+  .sayfa{padding:18px 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- GİRİŞ EKRANI -->
+<div id="giris-ekrani">
+  <div class="giris-logo">Yazım<span>Dünyası</span> 📚</div>
+  <div class="giris-alt">Türkçe Yazım Kuralları Öğrenme Platformu</div>
+  <div class="giris-kutu">
+    <div class="giris-sekmeler">
+      <button class="giris-sekme aktif" onclick="sekmeAc('giris',this)">🎓 Giriş Yap</button>
+      <button class="giris-sekme" onclick="sekmeAc('kayit',this)">✨ Kayıt Ol</button>
+      <button class="giris-sekme" onclick="sekmeAc('yonetici',this)">🔐 Yönetici</button>
+    </div>
+    <div id="giris-paneli" class="giris-panel aktif">
+      <h2>Hoş Geldin!</h2>
+      <p>Hesabınla giriş yap.</p>
+      <input class="girdi" id="g-kullanici" placeholder="Kullanıcı adı"/>
+      <input class="girdi" type="password" id="g-sifre" placeholder="Şifre" onkeydown="if(event.key==='Enter')kullaniciGiris()"/>
+      <button class="btn btn-altin" onclick="kullaniciGiris()">Giriş Yap →</button>
+      <div class="giris-link">Hesabın yok mu? <a onclick="sekmeAc('kayit',document.querySelectorAll('.giris-sekme')[1])">Kayıt ol</a></div>
+    </div>
+    <div id="kayit-paneli" class="giris-panel">
+      <h2>Hesap Oluştur</h2>
+      <p>Kendi hesabını oluştur, ilerlemeni takip et.</p>
+      <input class="girdi" id="k-ad" placeholder="Ad Soyad"/>
+      <input class="girdi" id="k-kullanici" placeholder="Kullanıcı adı (3-20 karakter)"/>
+      <input class="girdi" id="k-sinif" placeholder="Sınıf (örn: 10-A)"/>
+      <input class="girdi" type="password" id="k-sifre" placeholder="Şifre (en az 4 karakter)"/>
+      <input class="girdi" type="password" id="k-sifre2" placeholder="Şifre tekrar"/>
+      <button class="btn btn-altin" onclick="kullaniciKayit()">Kayıt Ol →</button>
+      <div class="giris-link">Hesabın var mı? <a onclick="sekmeAc('giris',document.querySelectorAll('.giris-sekme')[0])">Giriş yap</a></div>
+    </div>
+    <div id="yonetici-paneli" class="giris-panel">
+      <h2>Yönetici Girişi</h2>
+      <p>Yetkili giriş gerektirir.</p>
+      <input class="girdi" id="y-kullanici" placeholder="Kullanıcı adı"/>
+      <input class="girdi" type="password" id="y-sifre" placeholder="Şifre" onkeydown="if(event.key==='Enter')yoneticiGiris()"/>
+      <button class="btn btn-altin" onclick="yoneticiGiris()">Giriş Yap →</button>
+    </div>
+    <div class="giris-uyari" id="giris-uyari"></div>
+  </div>
+</div>
+
+<!-- UYGULAMA -->
+<div id="uygulama" style="display:none">
+<header>
+  <div class="logo">Yazım<span>Dünyası</span> 📚</div>
+  <div class="kullanici-bilgi">
+    <span>👤 <strong id="baslik-ad"></strong></span>
+    <span class="puan-rozet">⭐ <span id="baslik-puan">0</span></span>
+    <button onclick="cikisYap()">Çıkış</button>
+  </div>
+</header>
+<nav>
+  <button class="nav-btn aktif" onclick="sayfaGoster('anasayfa',this)">🏠 Ana Sayfa</button>
+  <button class="nav-btn" onclick="sayfaGoster('konular',this)">📖 Konu Anlatımı</button>
+  <button class="nav-btn tdk-nav" onclick="sayfaGoster('tdk',this)">📘 TDK Kuralları</button>
+  <button class="nav-btn" onclick="sayfaGoster('karikaturler',this)">🎨 Karikatürler</button>
+  <button class="nav-btn" onclick="sayfaGoster('sinav',this)">✏️ Sınav</button>
+  <button class="nav-btn" onclick="sayfaGoster('performans',this)">📊 Performans</button>
+  <button class="nav-btn yonetici-nav" id="yonetici-nav-btn" style="display:none" onclick="sayfaGoster('yonetici',this)">⚙️ Yönetici</button>
+</nav>
+
+<!-- ANA SAYFA -->
+<div id="sayfa-anasayfa" class="sayfa aktif">
+  <div class="kahraman">
+    <div class="kahraman-yazi">
+      <h1>Türkçeyi <span>Doğru</span> Yaz,<br>Güçlü Konuş!</h1>
+      <p>TDK kuralları, karikatürlü anlatımlar ve kişisel performans takibiyle yazım becerini geliştir.</p>
+      <div class="kahraman-butonlar">
+        <button class="btn btn-altin" onclick="sayfaGoster('tdk',document.querySelectorAll('.nav-btn')[2])">📘 TDK Kuralları</button>
+        <button class="btn btn-yesil" onclick="sayfaGoster('sinav',document.querySelectorAll('.nav-btn')[4])">✏️ Sınav Çöz</button>
+      </div>
+    </div>
+    <div class="kahraman-emoji">📝</div>
+  </div>
+  <div class="istatistik-satir">
+    <div class="istatistik-kart"><div class="istatistik-sayi" style="color:var(--accent)" id="ist-soru">0</div><div class="istatistik-etiket">Soru Bankası</div></div>
+    <div class="istatistik-kart"><div class="istatistik-sayi" style="color:var(--accent2)" id="ist-karikatur">0</div><div class="istatistik-etiket">Karikatür</div></div>
+    <div class="istatistik-kart"><div class="istatistik-sayi" style="color:var(--navy)">6</div><div class="istatistik-etiket">Konu Başlığı</div></div>
+    <div class="istatistik-kart"><div class="istatistik-sayi" style="color:var(--red)" id="ist-puan">0</div><div class="istatistik-etiket">Toplam Puanım</div></div>
+  </div>
+  <div style="margin-bottom:14px"><div class="bolum-baslik">Konular</div><div class="bolum-alt">Bir konuya tıkla ve öğrenmeye başla</div></div>
+  <div class="ana-izgara">
+    <div class="ana-kart" onclick="konuyaGit('yazim','buyuk-harf')"><div class="kart-ikon">🅰️</div><h3>Büyük Harf Kullanımı</h3><p>Cümle başları, özel isimler</p></div>
+    <div class="ana-kart" onclick="konuyaGit('yazim','de-ki-mi')"><div class="kart-ikon">🔀</div><h3>de / ki / mi Yazımı</h3><p>En çok karıştırılan ekler</p></div>
+    <div class="ana-kart" onclick="konuyaGit('yazim','birlesik')"><div class="kart-ikon">🔗</div><h3>Birleşik Kelimeler</h3><p>Bitişik ve ayrı yazım</p></div>
+    <div class="ana-kart" onclick="konuyaGit('noktalama','nokta')"><div class="kart-ikon">🔤</div><h3>Noktalama İşaretleri</h3><p>Virgül, nokta, iki nokta…</p></div>
+    <div class="ana-kart" onclick="konuyaGit('yazim','sayilar')"><div class="kart-ikon">🔢</div><h3>Sayıların Yazımı</h3><p>Rakam mı, yazı mı?</p></div>
+    <div class="ana-kart" onclick="sayfaGoster('tdk',document.querySelectorAll('.nav-btn')[2])"><div class="kart-ikon">📘</div><h3>TDK Kuralları</h3><p>Kapsamlı yazım rehberi</p></div>
+  </div>
+  <div class="haber-bolum">
+    <div class="bolum-baslik">📰 Haberler &amp; Duyurular</div>
+    <div class="bolum-alt">Yönetici tarafından eklenen güncel haberler</div>
+    <div class="haber-izgara" id="haber-izgara"></div>
+    <div id="haber-yok" class="haber-yok">Henüz haber eklenmemiş.</div>
+  </div>
+</div>
+
+<!-- KONULAR -->
+<div id="sayfa-konular" class="sayfa">
+  <div class="bolum-baslik">📖 Konu Anlatımı</div>
+  <div class="bolum-alt">TDK kurallarına dayalı ayrıntılı anlatımlar</div>
+  <div class="konu-sekmeler">
+    <button class="konu-sekme aktif" onclick="konuSekmesi('yazim',this)">✍️ Yazım Kuralları</button>
+    <button class="konu-sekme" onclick="konuSekmesi('noktalama',this)">🔤 Noktalama İşaretleri</button>
+  </div>
+  <div id="konu-alan-yazim" class="konu-alan aktif">
+    <div class="konu-duzen">
+      <div class="konu-kenar"><h3>Yazım Kuralları</h3><div id="kenar-yazim"></div></div>
+      <div id="icerik-yazim"></div>
+    </div>
+  </div>
+  <div id="konu-alan-noktalama" class="konu-alan">
+    <div class="konu-duzen">
+      <div class="konu-kenar"><h3>Noktalama İşaretleri</h3><div id="kenar-noktalama"></div></div>
+      <div id="icerik-noktalama"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TDK -->
+<div id="sayfa-tdk" class="sayfa">
+  <div class="tdk-kahraman">
+    <h1>📘 TDK Yazım Kuralları</h1>
+    <p>Türk Dil Kurumu yazım kılavuzuna dayalı kapsamlı kural anlatımları ve noktalama işaretleri rehberi.</p>
+  </div>
+  <div class="tdk-sekmeler">
+    <button class="tdk-sekme aktif" onclick="tdkSekmesi('yazim',this)">✍️ Yazım Kuralları</button>
+    <button class="tdk-sekme" onclick="tdkSekmesi('noktalama',this)">🔤 Noktalama İşaretleri</button>
+  </div>
+  <div id="tdk-yazim" class="tdk-bolum aktif"><div id="tdk-yazim-bloklar"></div></div>
+  <div id="tdk-noktalama" class="tdk-bolum"><div id="tdk-noktalama-bloklar"></div></div>
+</div>
+
+<!-- KARİKATÜRLER -->
+<div id="sayfa-karikaturler" class="sayfa">
+  <div class="bolum-baslik">🎨 Karikatür Galerisi</div>
+  <div class="bolum-alt">Yazım kurallarını eğlenceli karikatürlerle keşfet</div>
+  <div class="karikatur-filtre">
+    <button class="filtre-btn aktif" onclick="karikaturFiltre('hepsi',this)">Tümü</button>
+    <button class="filtre-btn" onclick="karikaturFiltre('buyuk-harf',this)">Büyük Harf</button>
+    <button class="filtre-btn" onclick="karikaturFiltre('noktalama',this)">Noktalama</button>
+    <button class="filtre-btn" onclick="karikaturFiltre('birlesik',this)">Birleşik Yazım</button>
+    <button class="filtre-btn" onclick="karikaturFiltre('de-ki-mi',this)">ki / mi / de</button>
+    <button class="filtre-btn" onclick="karikaturFiltre('sayilar',this)">Sayılar</button>
+  </div>
+  <div class="karikatur-galerisi" id="karikatur-galerisi"></div>
+  <div id="karikatur-yok" style="display:none;text-align:center;padding:36px;color:var(--muted)">Bu konuya henüz karikatür eklenmemiş.</div>
+</div>
+
+<!-- SINAV -->
+<div id="sayfa-sinav" class="sayfa">
+  <div class="sinav-sar">
+    <div id="sinav-baslangic" class="sinav-baslangic">
+      <div style="font-size:2.8rem;margin-bottom:10px">✏️</div>
+      <h2>Sınava Başla</h2>
+      <p style="color:var(--muted);margin-bottom:22px">Konu, zorluk ve soru sayısını seç!</p>
+      <div class="sinav-secenekler">
+        <div class="sinav-grup"><label>Konular</label><div id="konu-secimler"></div></div>
+        <div class="sinav-grup">
+          <label>Zorluk</label>
+          <label class="sinav-secim"><input type="checkbox" class="zorluk-sec" value="Kolay" checked> Kolay</label>
+          <label class="sinav-secim"><input type="checkbox" class="zorluk-sec" value="Orta" checked> Orta</label>
+          <label class="sinav-secim"><input type="checkbox" class="zorluk-sec" value="Zor" checked> Zor</label>
+        </div>
+        <div class="sinav-grup">
+          <label>Soru Sayısı</label>
+          <select class="sinav-sayi" id="soru-sayisi">
+            <option value="5">5 soru</option>
+            <option value="10" selected>10 soru</option>
+            <option value="20">20 soru</option>
+            <option value="hepsi">Tümü</option>
+          </select>
+          <div style="margin-top:10px">
+            <label style="font-size:0.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Soru Türü</label>
+            <label class="sinav-secim"><input type="checkbox" class="tip-sec" value="mc" checked> Çoktan Seçmeli</label>
+            <label class="sinav-secim"><input type="checkbox" class="tip-sec" value="tf" checked> Doğru / Yanlış</label>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-altin" style="width:100%;font-size:0.98rem" onclick="sinavBaslat()">🚀 Sınavı Başlat</button>
+      <div id="sinav-bas-uyari" style="color:var(--red);font-size:0.82rem;margin-top:9px;min-height:16px"></div>
+    </div>
+    <div id="sinav-aktif" style="display:none">
+      <div class="sinav-ust">
+        <div><div class="bolum-baslik" style="margin-bottom:0">✏️ Sınav</div></div>
+        <div style="display:flex;gap:9px;align-items:center">
+          <div class="puan-hap">⭐ <span id="sinav-puan">0</span> puan</div>
+          <button class="btn btn-cerceve btn-kucuk" onclick="sinavaBas()">← Geri</button>
+        </div>
+      </div>
+      <div class="ilerleme-sar">
+        <div class="ilerleme-etiket"><span>Soru <span id="sinav-no">0</span> / <span id="sinav-top">0</span></span><span id="sinav-yuzde">0%</span></div>
+        <div class="ilerleme-bar"><div class="ilerleme-dolu" id="sinav-dolu" style="width:0%"></div></div>
+      </div>
+      <div id="sinav-kap"></div>
+      <div id="sinav-bitti" style="display:none;text-align:center;padding:44px 18px">
+        <div style="font-size:3.8rem">🎉</div>
+        <h2 style="font-size:1.9rem;color:var(--accent);margin:10px 0">Sınav Tamamlandı!</h2>
+        <p style="color:var(--muted);margin-bottom:14px">Bu sınavdan kazandığın puan:</p>
+        <div style="font-size:2.4rem;font-weight:800;color:var(--navy);margin-bottom:22px"><span id="sinav-son">0</span></div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-altin" onclick="sayfaGoster('performans',document.querySelectorAll('.nav-btn')[5])">📊 Performansımı Gör</button>
+          <button class="btn btn-yesil" onclick="sinavaBas()">🔄 Yeni Sınav</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFORMANS -->
+<div id="sayfa-performans" class="sayfa">
+  <div class="bolum-baslik">📊 Performans Takibi</div>
+  <div class="bolum-alt">Güçlü ve zayıf konularını keşfet</div>
+  <div class="performans-izgara" id="performans-ist"></div>
+  <div class="performans-detay" id="performans-detay"></div>
+</div>
+
+<!-- YÖNETİCİ -->
+<div id="sayfa-yonetici" class="sayfa">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px">
+    <div><div class="bolum-baslik" style="margin-bottom:0">⚙️ Yönetici Bölümü</div><div style="color:var(--muted);font-size:0.85rem">İçerik yönetimi</div></div>
+    <button class="btn btn-cerceve btn-kucuk" onclick="yoneticiCikis()">Çıkış</button>
+  </div>
+  <div class="yonetici-duzen">
+    <div class="yonetici-kenar">
+      <h3>Sorular &amp; Medya</h3>
+      <button class="yk-btn aktif" onclick="yoneticiPanel('soru-ekle',this)">➕ Soru Ekle</button>
+      <button class="yk-btn" onclick="yoneticiPanel('soru-liste',this)">📋 Soru Listesi</button>
+      <button class="yk-btn" onclick="yoneticiPanel('karikatur-ekle',this)">🖼️ Karikatür Ekle</button>
+      <button class="yk-btn" onclick="yoneticiPanel('karikatur-liste',this)">🎨 Karikatür Listesi</button>
+      <h3 style="margin-top:14px">İçerik</h3>
+      <button class="yk-btn" onclick="yoneticiPanel('blok-ekle',this)">📝 İçerik Bloğu Ekle</button>
+      <button class="yk-btn" onclick="yoneticiPanel('blok-liste',this)">📋 İçerik Listesi</button>
+      <h3 style="margin-top:14px">Diğer</h3>
+      <button class="yk-btn" onclick="yoneticiPanel('haber-ekle',this)">📰 Haber Ekle</button>
+      <button class="yk-btn" onclick="yoneticiPanel('haber-liste',this)">📋 Haber Listesi</button>
+      <button class="yk-btn" onclick="yoneticiPanel('kullanicilar',this)">👥 Kullanıcılar</button>
+      <button class="yk-btn" onclick="yoneticiPanel('sifre',this)">🔑 Şifre Değiştir</button>
+      <button class="yk-btn" onclick="yoneticiPanel('sifirla',this)" style="color:var(--red)">🔄 Varsayılana Sıfırla</button>
+    </div>
+    <div>
+
+      <!-- SORU EKLE / DÜZENLE -->
+      <div id="panel-soru-ekle" class="yonetici-panel aktif">
+        <h2 id="soru-panel-baslik">➕ Yeni Soru Ekle</h2>
+        <div id="bil-soru" class="bildirim"></div>
+        <div class="form-alan">
+          <input type="hidden" id="soru-duzenle-id" value="">
+          <div class="form-cift">
+            <div class="form-grup"><label>Konu</label><select id="soru-konu"></select></div>
+            <div class="form-grup"><label>Zorluk</label><select id="soru-zorluk"><option>Kolay</option><option>Orta</option><option>Zor</option></select></div>
+          </div>
+          <div class="form-grup"><label>Soru Türü</label>
+            <select id="soru-tur" onchange="soruTuru()">
+              <option value="mc">Çoktan Seçmeli (4 şık)</option>
+              <option value="tf">Doğru / Yanlış</option>
+            </select>
+          </div>
+          <div class="form-grup"><label>Soru Metni</label><textarea id="soru-metin" placeholder="Soruyu buraya yazın..."></textarea></div>
+          <div id="mc-secenekler">
+            <div class="form-grup">
+              <label>Seçenekler</label>
+              <div class="secenek-duzenle">
+                <div class="secenek-satir"><span class="secenek-harf">A</span><input type="text" id="sec-a" placeholder="Seçenek A"><label class="dogru-etiket"><input type="radio" name="dogru-cevap" value="0"> Doğru</label></div>
+                <div class="secenek-satir"><span class="secenek-harf">B</span><input type="text" id="sec-b" placeholder="Seçenek B"><label class="dogru-etiket"><input type="radio" name="dogru-cevap" value="1"> Doğru</label></div>
+                <div class="secenek-satir"><span class="secenek-harf">C</span><input type="text" id="sec-c" placeholder="Seçenek C"><label class="dogru-etiket"><input type="radio" name="dogru-cevap" value="2"> Doğru</label></div>
+                <div class="secenek-satir"><span class="secenek-harf">D</span><input type="text" id="sec-d" placeholder="Seçenek D"><label class="dogru-etiket"><input type="radio" name="dogru-cevap" value="3"> Doğru</label></div>
+              </div>
+            </div>
+          </div>
+          <div id="tf-secenekler" style="display:none">
+            <div class="form-grup"><label>Doğru Cevap</label>
+              <div style="display:flex;gap:14px;margin-top:7px">
+                <label class="sinav-secim"><input type="radio" name="dy-cevap" value="1"> ✅ Doğru</label>
+                <label class="sinav-secim"><input type="radio" name="dy-cevap" value="0"> ❌ Yanlış</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-grup"><label>Açıklama</label><textarea id="soru-aciklama" placeholder="Doğru cevabın açıklaması..."></textarea></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-yesil" onclick="soruKaydet()">✅ Soruyu Kaydet</button>
+            <button class="btn btn-cerceve btn-kucuk" onclick="soruFormTemizle()" id="soru-iptal-btn" style="display:none">İptal</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SORU LİSTESİ -->
+      <div id="panel-soru-liste" class="yonetici-panel">
+        <h2>📋 Soru Listesi</h2>
+        <div class="liste-kart"><h3>Mevcut Sorular</h3><div id="soru-liste-kap"></div></div>
+      </div>
+
+      <!-- KARİKATÜR EKLE -->
+      <div id="panel-karikatur-ekle" class="yonetici-panel">
+        <h2 id="karikatur-panel-baslik">🖼️ Karikatür Ekle</h2>
+        <div id="bil-karikatur" class="bildirim"></div>
+        <div class="form-alan">
+          <input type="hidden" id="karikatur-duzenle-id" value="">
+          <div class="form-cift">
+            <div class="form-grup"><label>Konu</label><select id="karikatur-konu"></select></div>
+            <div class="form-grup"><label>Yedek Simge</label><input type="text" id="karikatur-simge" placeholder="🤔" maxlength="4"></div>
+          </div>
+          <div class="form-grup"><label>Görsel Yükle (en fazla 10MB)</label>
+            <div class="yukle-alan" onclick="document.getElementById('karikatur-dosya').click()">
+              <div>📁 Görseli buraya tıklayarak seç</div>
+              <div style="font-size:0.78rem;color:var(--muted);margin-top:3px">JPG, PNG – En fazla 10MB</div>
+              <input type="file" id="karikatur-dosya" accept="image/*" onchange="gorselOnizle(this)">
+              <img id="karikatur-onizleme" class="yukle-onizleme" style="display:none">
+            </div>
+          </div>
+          <div class="form-grup"><label>Konuşma Balonu</label><input type="text" id="karikatur-balon" placeholder="Karikatür repliği..."></div>
+          <div class="form-grup"><label>Başlık</label><input type="text" id="karikatur-baslik" placeholder="Kural başlığı"></div>
+          <div class="form-grup"><label>Açıklama</label><textarea id="karikatur-aciklama" placeholder="Kuralın açıklaması..."></textarea></div>
+          <div class="form-grup"><label>Altyazı (isteğe bağlı)</label><input type="text" id="karikatur-altyazi" placeholder="Karikatürün altında görünecek not..."></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-yesil" onclick="karikaturKaydet()">✅ Karikatürü Kaydet</button>
+            <button class="btn btn-cerceve btn-kucuk" onclick="karikaturFormTemizle()" id="karikatur-iptal-btn" style="display:none">İptal</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KARİKATÜR LİSTESİ -->
+      <div id="panel-karikatur-liste" class="yonetici-panel">
+        <h2>🎨 Karikatür Listesi</h2>
+        <div class="liste-kart"><h3>Mevcut Karikatürler</h3><div id="karikatur-liste-kap"></div></div>
+      </div>
+
+      <!-- BLOK EKLE -->
+      <div id="panel-blok-ekle" class="yonetici-panel">
+        <h2 id="blok-panel-baslik">📝 İçerik Bloğu Ekle</h2>
+        <div id="bil-blok" class="bildirim"></div>
+        <div class="form-alan">
+          <input type="hidden" id="blok-duzenle-id" value="">
+          <div class="form-cift">
+            <div class="form-grup"><label>Bölüm</label>
+              <select id="blok-bolum">
+                <option value="topics-yazim">Konu Anlatımı – Yazım Kuralları</option>
+                <option value="topics-noktalama">Konu Anlatımı – Noktalama</option>
+                <option value="tdk-yazim">TDK – Yazım Kuralları</option>
+                <option value="tdk-noktalama">TDK – Noktalama</option>
+              </select>
+            </div>
+            <div class="form-grup"><label>Alt Konu</label>
+              <select id="blok-alt">
+                <option value="buyuk-harf">Büyük Harf</option>
+                <option value="sayilar">Sayıların Yazımı</option>
+                <option value="de-ki-mi">de / ki / mi</option>
+                <option value="birlesik">Birleşik Kelimeler</option>
+                <option value="kisaltma">Kısaltmalar</option>
+                <option value="karisik">Karıştırılan Kelimeler</option>
+                <option value="nokta">Nokta</option>
+                <option value="virgul">Virgül</option>
+                <option value="noktali-virgul">Noktalı Virgül</option>
+                <option value="iki-nokta">İki Nokta</option>
+                <option value="uc-nokta">Üç Nokta</option>
+                <option value="soru">Soru İşareti</option>
+                <option value="unlem">Ünlem İşareti</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grup"><label>Blok Başlığı</label><input type="text" id="blok-baslik" placeholder="Kural başlığı..."></div>
+          <div class="form-grup"><label>İçerik (her satır ayrı madde olur)</label><textarea id="blok-icerik" placeholder="Kural 1&#10;Kural 2&#10;Kural 3..." style="min-height:110px"></textarea></div>
+          <div class="form-cift">
+            <div class="form-grup"><label>Doğru Örnek</label><input type="text" id="blok-dogru" placeholder="✅ Doğru örnek..."></div>
+            <div class="form-grup"><label>Yanlış Örnek</label><input type="text" id="blok-yanlis" placeholder="❌ Yanlış örnek..."></div>
+          </div>
+          <div class="form-cift">
+            <div class="form-grup"><label>Mini Karikatür Simgesi</label><input type="text" id="blok-simge" placeholder="🤔" maxlength="4"></div>
+            <div class="form-grup"><label>Mini Karikatür Metni</label><input type="text" id="blok-balon" placeholder="Balon metni..."></div>
+          </div>
+          <div class="form-grup"><label>Not Kutusu (isteğe bağlı)</label><input type="text" id="blok-not" placeholder="💡 Önemli not..."></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-yesil" onclick="blokKaydet()">✅ Bloğu Kaydet</button>
+            <button class="btn btn-cerceve btn-kucuk" onclick="blokFormTemizle()" id="blok-iptal-btn" style="display:none">İptal</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOK LİSTESİ -->
+      <div id="panel-blok-liste" class="yonetici-panel">
+        <h2>📋 İçerik Bloğu Listesi</h2>
+        <div class="liste-kart"><h3>Tüm İçerik Blokları</h3><div id="blok-liste-kap"></div></div>
+      </div>
+
+      <!-- HABER EKLE -->
+      <div id="panel-haber-ekle" class="yonetici-panel">
+        <h2 id="haber-panel-baslik">📰 Haber Ekle</h2>
+        <div id="bil-haber" class="bildirim"></div>
+        <div class="form-alan" style="max-width:540px">
+          <input type="hidden" id="haber-duzenle-id" value="">
+          <div class="form-grup"><label>Başlık</label><input type="text" id="haber-baslik" placeholder="Haber başlığı..."></div>
+          <div class="form-grup"><label>İçerik</label><textarea id="haber-icerik" placeholder="Haber içeriği..." style="min-height:95px"></textarea></div>
+          <div class="form-cift">
+            <div class="form-grup"><label>Etiket</label><input type="text" id="haber-etiket" placeholder="Duyuru, Etkinlik..."></div>
+            <div class="form-grup"><label>Tarih</label><input type="date" id="haber-tarih"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-yesil" onclick="haberKaydet()">✅ Haberi Yayınla</button>
+            <button class="btn btn-cerceve btn-kucuk" onclick="haberFormTemizle()" id="haber-iptal-btn" style="display:none">İptal</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HABER LİSTESİ -->
+      <div id="panel-haber-liste" class="yonetici-panel">
+        <h2>📋 Haber Listesi</h2>
+        <div class="liste-kart"><h3>Mevcut Haberler</h3><div id="haber-liste-kap"></div></div>
+      </div>
+
+      <!-- KULLANICILAR -->
+      <div id="panel-kullanicilar" class="yonetici-panel">
+        <h2>👥 Kayıtlı Kullanıcılar</h2>
+        <div class="liste-kart"><h3>Kullanıcı Listesi</h3><div id="kullanici-liste-kap"></div></div>
+      </div>
+
+      <!-- ŞİFRE -->
+      <div id="panel-sifre" class="yonetici-panel">
+        <h2>🔑 Yönetici Şifresi Değiştir</h2>
+        <div id="bil-sifre" class="bildirim"></div>
+        <div class="form-alan" style="max-width:380px">
+          <div class="form-grup"><label>Mevcut Şifre</label><input type="password" id="sifre-eski"></div>
+          <div class="form-grup"><label>Yeni Şifre</label><input type="password" id="sifre-yeni"></div>
+          <div class="form-grup"><label>Yeni Şifre (Tekrar)</label><input type="password" id="sifre-yeni2"></div>
+          <button class="btn btn-yesil" onclick="sifreDegistir()">✅ Değiştir</button>
+        </div>
+      </div>
+
+      <!-- SIFIRLA -->
+      <div id="panel-sifirla" class="yonetici-panel">
+        <h2>🔄 Varsayılana Sıfırla</h2>
+        <div class="form-alan">
+          <p style="color:var(--muted);margin-bottom:18px;font-family:'Lora',serif">Aşağıdaki işlemler geri alınamaz.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="btn btn-cerceve" onclick="blokSifirla()">🔄 İçerik Bloklarını Varsayılana Döndür</button>
+            <button class="btn btn-cerceve" onclick="soruSifirla()">🔄 Soruları Varsayılana Döndür</button>
+            <button class="btn btn-cerceve" onclick="karikaturSifirla()">🔄 Karikatürleri Varsayılana Döndür</button>
+            <button class="btn btn-kirmizi" style="margin-top:8px" onclick="hepsiniSifirla()">⚠️ Tüm Verileri Sil</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div><!-- /uygulama -->
+
+<!-- BÜYÜK GÖRSEL -->
+<div id="buyuk-gorsel" onclick="buyukGorselKapat(event)">
+  <div class="bg-ic">
+    <button class="bg-kapat" onclick="document.getElementById('buyuk-gorsel').classList.remove('acik')">✕</button>
+    <div class="bg-resim" id="bg-resim"></div>
+    <div class="bg-govde">
+      <div style="font-size:0.72rem;color:var(--accent);font-weight:700;text-transform:uppercase;margin-bottom:5px" id="bg-konu"></div>
+      <h2 id="bg-baslik"></h2>
+      <p id="bg-aciklama" style="margin-top:9px"></p>
+      <div id="bg-altyazi" class="bg-altyazi" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// GÜVENLİ METİN
+// ════════════════════════════════════════════════════════
+function gv(str){const d=document.createElement('div');d.textContent=String(str||'');return d.innerHTML;}
+
+// ════════════════════════════════════════════════════════
+// localStorage YARDIMCILARI
+// ════════════════════════════════════════════════════════
+const LS={
+  al(k,v){try{const d=localStorage.getItem(k);return d?JSON.parse(d):v;}catch{return v;}},
+  kaydet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){alert('Depolama alanı doldu!');}}
+};
+
+// ════════════════════════════════════════════════════════
+// KARIŞIK TABLO
+// ════════════════════════════════════════════════════════
+const KARISIK_TABLO=[
+  ['hergün','her gün','"her" her zaman ayrı yazılır'],
+  ['herşey','her şey','"her" her zaman ayrı yazılır'],
+  ['hiçbirşey','hiçbir şey','"şey" ayrı yazılır'],
+  ['birşey','bir şey','İki ayrı kelime'],
+  ['değilmi','değil mi','Soru eki daima ayrı'],
+  ['hemde','hem de','Bağlaç ayrı yazılır'],
+  ['birçokşey','birçok şey','"birçok" bitişik, "şey" ayrı'],
+  ['teşekkürler','teşekkürler ✅','Doğru yazım'],
+];
+
+const KONU_ADLARI={
+  'buyuk-harf':'Büyük Harf','sayilar':'Sayıların Yazımı','de-ki-mi':'de / ki / mi',
+  'birlesik':'Birleşik Kelimeler','kisaltma':'Kısaltmalar','karisik':'Karıştırılan Kelimeler',
+  'noktalama':'Noktalama','nokta':'Nokta','virgul':'Virgül','noktali-virgul':'Noktalı Virgül',
+  'iki-nokta':'İki Nokta','uc-nokta':'Üç Nokta','soru':'Soru İşareti','unlem':'Ünlem İşareti'
+};
+
+// ════════════════════════════════════════════════════════
+// VARSAYILAN VERİLER
+// ════════════════════════════════════════════════════════
+const VARSAYILAN_BLOKLAR=[
+  {id:'b1',bolum:'topics-yazim',alt:'buyuk-harf',baslik:'🅰️ Büyük Harflerin Yazımı',icerik:'Her cümle büyük harfle başlar.\nÖzel adlar (kişi, yer, kurum) büyük harfle başlar: Atatürk, Türkiye, Ankara.\nTarihi olay adları büyük harfle başlar: Kurtuluş Savaşı, Rönesans.\nEser adlarında yalnızca ilk kelimenin ilk harfi büyük yazılır.\nÖzel isimlere getirilen ekler kesme işaretiyle ayrılır: Türkiye\'de, Ahmet\'e.',exDogru:'İstanbul güzel bir şehirdir. | Atatürk\'ün eserleri',exYanlis:'istanbul güzel bir şehirdir. | atatürkün eserleri',simge:'🅰️',balon:'Özel isimler her zaman büyük harfle!',not:'💡 "dünya" kelimesi gezegen anlamında kullanılmadığında küçük harfle yazılır.'},
+  {id:'b2',bolum:'topics-yazim',alt:'buyuk-harf',baslik:'📌 Unvan ve Eser Adları',icerik:'Kişi adlarından önce gelen unvanlar büyük harfle yazılır: Doktor Ayşe, Profesör Mehmet.\nTek başına kullanılan unvanlar küçük harfle yazılır: Doktora gittim.\nSaygı ifadeleri büyük harfle başlar: Sayın Müdür.',exDogru:'Doktor Mehmet Bey',exYanlis:'doktor mehmet bey',simge:'',balon:'',not:''},
+  {id:'b3',bolum:'topics-yazim',alt:'sayilar',baslik:'🔢 Sayıların Yazımı',icerik:'Sayılar metin içinde genellikle yazıyla yazılır: beş kitap, on dört öğrenci.\nBüyük sayılar ve ölçü birimleriyle rakamla yazılır: 1.500 TL, 25 km.\nSıra sayıları: 3. sınıf, 5\'inci madde.\nYüzde işareti rakamdan bitişik yazılır: %80, %100.',exDogru:'Beş öğrenci, 1500 TL, 3. sınıf',exYanlis:'5 öğrenci (metin içi)',simge:'🔢',balon:'Metin içinde "5 öğrenci" değil "beş öğrenci"!',not:''},
+  {id:'b4',bolum:'topics-yazim',alt:'de-ki-mi',baslik:'🔀 de/da – Ek mi Bağlaç mı?',icerik:'Hal eki "-de/-da/-te/-ta" bitişik yazılır ve ünlü uyumuna uyar: evde, okulda, tepede.\nBağlaç "de/da" ayrı yazılır: Sen de gel. O da bildi.\nBağlaç "de/da" kaldırıldığında anlam bozulmaz; ek kaldırılınca bozulur.',exDogru:'Evde oturdu. (ek) | Sen de gel. (bağlaç)',exYanlis:'Sende mi geleceksin?',simge:'🤔',balon:'Kaldırırsan anlam bozuluyor mu? EK! Bozulmuyorsa BAĞLAÇ!',not:''},
+  {id:'b5',bolum:'topics-yazim',alt:'de-ki-mi',baslik:'📌 ki – Ek mi Bağlaç mı?',icerik:'Bağlaç "ki" ayrı yazılır: Anladım ki sen haklısın.\nSıfat yapan "-ki" eki bitişik yazılır: dünkü, bugünkü, içerideki.\nKalıplaşmışlar: sanki, belki, çünkü — tek kelime yazılır.',exDogru:'Öyle yoruldum ki uyuyakaldım. | Bugünkü hava',exYanlis:'Biliyorki | Dünki hava',simge:'',balon:'',not:''},
+  {id:'b6',bolum:'topics-yazim',alt:'de-ki-mi',baslik:'📌 mi/mı/mu/mü – Soru Eki',icerik:'Soru eki her zaman ayrı yazılır.\nÜnlü uyumuna göre şekil alır: geldi mi, oldu mu, gördü mü.\nSoru ekinin aldığı zaman ve kişi ekleri bitişik yazılır: gelecek misin.',exDogru:'Gidecek misin? | Güzel mi?',exYanlis:'Gidecekmisin? | Güzelmi?',simge:'❓',balon:'Soru eki "mi" DAİMA ayrı yazılır!',not:''},
+  {id:'b7',bolum:'topics-yazim',alt:'birlesik',baslik:'🔗 Bitişik Yazılan Birleşik Kelimeler',icerik:'Anlam kaymasına uğramış birleşik isimler bitişik yazılır: ayakkabı, gecekondu.\nBirleşik fiiller bitişik yazılır: uyuyakalmak, gelivermek.\nPekiştirme sıfatları bitişik yazılır: sapsarı, bembeyaz, simsiyah.',exDogru:'gecekondu | bembeyaz | uyuyakalmak',exYanlis:'gece kondu | bem beyaz',simge:'👟',balon:'"ayak"+"kabı" → "ayakkabı" Anlam kaymış, bitişik!',not:''},
+  {id:'b8',bolum:'topics-yazim',alt:'birlesik',baslik:'📌 Ayrı Yazılan Birleşikler',icerik:'Renk adlarıyla kurulan tamlamalar ayrı yazılır: gül kurusu, fil dişi.\nAnlam kaymasına uğramamış sıfat tamlamaları ayrı: taş köprü, demir kapı.\nİkilemelerde kelimeler ayrı yazılır: çıtır çıtır, şıpır şıpır.',exDogru:'gül kurusu | taş köprü | çıtır çıtır',exYanlis:'gülkurusu | taşköprü',simge:'',balon:'',not:'💡 Şüphede kaldığında sozluk.gov.tr adresini kontrol et.'},
+  {id:'b9',bolum:'topics-yazim',alt:'kisaltma',baslik:'✂️ Kısaltmaların Yazımı',icerik:'Kısaltmalar büyük harfle başlar ve nokta alır: Dr., Prof., Arş. Gör.\nKurum kısaltmaları büyük harfle: TDK, TBMM, MEB.\nKısaltmalara getirilen ekler kesme işareti ile ayrılır: TDK\'nın, TBMM\'de.\nÖlçü birimleri noktasız yazılır: km, m, kg.',exDogru:"TDK'nın, Dr. Ahmet, 25 km",exYanlis:"TDK'nin, TBMMde",simge:'✂️',balon:"TDK'nın → doğru ✅ | TDK'nin → yanlış ❌",not:''},
+  {id:'b10',bolum:'topics-yazim',alt:'karisik',baslik:'⚠️ Sık Karıştırılan Kelimeler',icerik:'TABLO',exDogru:'',exYanlis:'',simge:'😅',balon:'"her gün" mü "hergün" mü? Her zaman ayrı!',not:'',tabloMu:true},
+  {id:'b11',bolum:'topics-noktalama',alt:'nokta',baslik:'🔴 Nokta ( . )',icerik:'Cümlenin sonuna konur.\nKısaltmaların sonuna konur: Dr., Prof. Dr.\nSıra sayılarından sonra konur: 1., 2., 3.\nSaatlerde: 14.30 | Tarihlerde: 29.10.1923.',exDogru:'',exYanlis:'',simge:'🔴',balon:'Cümle bitti, nokta koy!',not:'💡 Cümle sonunda kısaltma varsa ikinci nokta konmaz.'},
+  {id:'b12',bolum:'topics-noktalama',alt:'virgul',baslik:'🟠 Virgül ( , )',icerik:'Sıralı ögeleri ayırır: Kalem, defter, çanta aldım.\nEvet/Hayır gibi sözcüklerden sonra konur: Evet, haklısın.\nUzun bağımlı cümleleri ayırır.\nSayılarda ondalık ayırır: 3,14.',exDogru:'Yiyelim, çocuklar.',exYanlis:'Yiyelim çocuklar. (anlam bozulur!)',simge:'😂',balon:'"Yiyelim çocuklar" vs "Yiyelim, çocuklar" – bir virgül, iki anlam!',not:''},
+  {id:'b13',bolum:'topics-noktalama',alt:'noktali-virgul',baslik:'🟡 Noktalı Virgül ( ; )',icerik:'Virgülden güçlü, noktadan zayıf bir duraklama sağlar.\nBağlı cümleleri birbirinden ayırır: Hava soğudu; dışarı çıkmadık.',exDogru:'Sabah erken kalktı; işe yetişti.',exYanlis:'',simge:'🟡',balon:'Noktalı virgül, virgülden kuvvetli bir mola!',not:''},
+  {id:'b14',bolum:'topics-noktalama',alt:'iki-nokta',baslik:'🔵 İki Nokta ( : )',icerik:'Açıklama veya liste başlamadan önce konur.\nAlıntı cümlelerinden önce konur.\nMatematikte bölme işaretini gösterir: 10 : 2 = 5.',exDogru:'Malzemeler: un, şeker, yumurta.',exYanlis:'',simge:'📋',balon:'Liste geliyorsa iki nokta koy!',not:''},
+  {id:'b15',bolum:'topics-noktalama',alt:'uc-nokta',baslik:'⚫ Üç Nokta ( … )',icerik:'Cümlenin tamamlanmadığını gösterir.\nAlıntılarda atlanan bölümleri gösterir.\nTereddüt veya derin düşünceyi ifade eder.',exDogru:'Gelecek mi acaba…',exYanlis:'',simge:'🤫',balon:'Cümle yarım kaldı mı? Üç nokta!',not:''},
+  {id:'b16',bolum:'topics-noktalama',alt:'soru',baslik:'❓ Soru İşareti ( ? )',icerik:'Soru cümlelerinin sonuna konur.\nDolaylı soru cümlelerinin sonuna konmaz: Nereye gittiğini sordu.\nŞüphe bildirmek için parantez içinde: 1850(?).',exDogru:'Gidecek misin?',exYanlis:'Nereye gittiğini sordu? (yanlış)',simge:'❓',balon:'Soru var mı? Soru işareti koy!',not:''},
+  {id:'b17',bolum:'topics-noktalama',alt:'unlem',baslik:'❗ Ünlem İşareti ( ! )',icerik:'Ünlem cümlelerinin sonuna konur.\nEmir cümlelerinin sonuna konur.\nSeslenme ve hitap ifadelerinden sonra.\nAlay için parantez içinde: Çok akıllı(!) bir karar.',exDogru:'Dur! Oraya gitme!',exYanlis:'',simge:'❗',balon:'Emir, seslenme, heyecan → ünlem işareti!',not:''},
+  {id:'b18',bolum:'tdk-yazim',alt:'buyuk-harf',baslik:'🅰️ Büyük Harflerin Yazımı (TDK)',icerik:'Her cümle büyük harfle başlar.\nÖzel adlar büyük harfle başlar: Atatürk, Türkiye.\nTarihi olay adları: Kurtuluş Savaşı, Rönesans.\nEser adlarında yalnızca ilk kelimenin ilk harfi büyük yazılır.',exDogru:"Türkiye'de, Ahmet'e",exYanlis:"türkiye'de, ahmet'e",simge:'🅰️',balon:'Özel isimler her zaman büyük harfle!',not:''},
+  {id:'b19',bolum:'tdk-yazim',alt:'sayilar',baslik:'🔢 Sayıların Yazımı (TDK)',icerik:'Sayılar metin içinde yazıyla yazılır.\nBüyük sayılar rakamla yazılır: 1.500 TL.\nSıra sayıları: 3. sınıf.\nTarihler: 29 Ekim 1923.',exDogru:'Beş öğrenci | 1500 TL',exYanlis:'5 öğrenci (metin içi)',simge:'',balon:'',not:''},
+  {id:'b20',bolum:'tdk-yazim',alt:'de-ki-mi',baslik:'🔀 de/da – ki – mi Yazımı (TDK)',icerik:'Bağlaç "de/da" ayrı yazılır: Sen de gel.\nHal eki "-de/-da" bitişik yazılır: evde, okulda.\nBağlaç "ki" ayrı yazılır: Anladım ki geç kaldım.\nSoru eki "mi" daima ayrı yazılır: Geldi mi?',exDogru:'',exYanlis:'',simge:'🤔',balon:'Kaldırırsan anlam bozuluyor mu? EK!',not:''},
+  {id:'b21',bolum:'tdk-yazim',alt:'birlesik',baslik:'🔗 Birleşik Kelimelerin Yazımı (TDK)',icerik:'Anlam kaymasına uğramış birleşik isimler bitişik yazılır: ayakkabı, gecekondu.\nBirleşik fiiller bitişik yazılır: uyuyakalmak.\nRenk adlarıyla yapılan tamlamalar ayrı yazılır: gül kurusu.',exDogru:'gecekondu | gül kurusu',exYanlis:'gece kondu | gülkurusu',simge:'',balon:'',not:''},
+  {id:'b22',bolum:'tdk-yazim',alt:'kisaltma',baslik:'✂️ Kısaltmaların Yazımı (TDK)',icerik:'Kısaltmalar büyük harfle başlar ve nokta alır: Dr., Prof.\nKurum kısaltmaları büyük harfle: TDK, TBMM.\nEkler kesme işareti ile ayrılır: TDK\'nın.',exDogru:"TDK'nın | Dr. Ahmet | 25 km",exYanlis:"TDK'nin | TBMMde",simge:'✂️',balon:"TDK'nın → doğru ✅",not:''},
+  {id:'b23',bolum:'tdk-yazim',alt:'karisik',baslik:'⚠️ Sık Karıştırılan Kelimeler (TDK)',icerik:'TABLO',exDogru:'',exYanlis:'',simge:'😅',balon:'"her gün" mü "hergün" mü? Her zaman ayrı!',not:'',tabloMu:true},
+  {id:'b24',bolum:'tdk-noktalama',alt:'nokta',baslik:'🔴 Nokta ( . ) – TDK',icerik:'Cümlenin sonuna konur.\nKısaltmaların sonuna konur: Dr., Prof. Dr.\nSıra sayılarından sonra: 1., 2., 3.',exDogru:'',exYanlis:'',simge:'🔴',balon:'Cümle bitti, nokta koy!',not:''},
+  {id:'b25',bolum:'tdk-noktalama',alt:'virgul',baslik:'🟠 Virgül ( , ) – TDK',icerik:'Sıralı ögeleri ayırır.\nEvet/Hayır sözcüklerinden sonra konur.\nAçıklayıcı eklerin önüne ve arkasına konur.',exDogru:'"Yiyelim, çocuklar."',exYanlis:'"Yiyelim çocuklar."',simge:'😂',balon:'Virgül hayat kurtarır!',not:''},
+  {id:'b26',bolum:'tdk-noktalama',alt:'noktali-virgul',baslik:'🟡 Noktalı Virgül ( ; ) – TDK',icerik:'Virgülden güçlü, noktadan zayıf bir duraklama.\nBağlı cümleleri ayırır.',exDogru:'Sabah erken kalktı; işe yetişti.',exYanlis:'',simge:'',balon:'',not:''},
+  {id:'b27',bolum:'tdk-noktalama',alt:'iki-nokta',baslik:'🔵 İki Nokta ( : ) – TDK',icerik:'Açıklama veya listeden önce konur.\nAlıntı cümlelerinden önce konur.',exDogru:'Üç şehir: İstanbul, Ankara, İzmir.',exYanlis:'',simge:'📋',balon:'Liste geliyorsa iki nokta koy!',not:''},
+  {id:'b28',bolum:'tdk-noktalama',alt:'uc-nokta',baslik:'⚫ Üç Nokta ( … ) – TDK',icerik:'Cümlenin tamamlanmadığını gösterir.\nAlıntılarda atlanan bölümleri gösterir.',exDogru:'Biliyorum ama…',exYanlis:'',simge:'',balon:'',not:''},
+  {id:'b29',bolum:'tdk-noktalama',alt:'soru',baslik:'❓ Soru İşareti ( ? ) – TDK',icerik:'Soru cümlelerinin sonuna konur.\nDolaylı soru cümlelerinin sonuna konmaz.',exDogru:'Bugün gelecek misin?',exYanlis:'Nereye gittiğini sordu? (yanlış)',simge:'❓',balon:'Soru var mı? Soru işareti koy!',not:''},
+  {id:'b30',bolum:'tdk-noktalama',alt:'unlem',baslik:'❗ Ünlem İşareti ( ! ) – TDK',icerik:'Ünlem cümlelerinin sonuna konur.\nEmir cümlelerinin sonuna konur.\nAlay için parantez içinde.',exDogru:'Dur! Oraya gitme!',exYanlis:'',simge:'❗',balon:'Emir, seslenme, heyecan → ünlem!',not:''},
+];
+
+const VARSAYILAN_SORULAR=[
+  {id:'s1',konu:'buyuk-harf',zorluk:'Kolay',tur:'mc',metin:'Hangi cümle büyük harf kullanımı açısından doğrudur?',secenekler:['istanbul güzel bir şehirdir.','İstanbul güzel bir şehirdir.','istanbul Güzel bir şehirdir.','İstanbul Güzel Bir Şehirdir.'],dogru:1,aciklama:'Her cümle büyük harfle başlar ve özel isimler büyük yazılır.'},
+  {id:'s2',konu:'buyuk-harf',zorluk:'Orta',tur:'mc',metin:'"Atatürk" kelimesinin doğru kullanımı hangisidir?',secenekler:["Atatürk'ün eserleri","atatürk'ün eserleri","Atatürkün eserleri","Atatürkun eserleri"],dogru:0,aciklama:'Özel isimlere getirilen ekler kesme işaretiyle ayrılır.'},
+  {id:'s3',konu:'noktalama',zorluk:'Kolay',tur:'mc',metin:'Virgül kullanımı açısından hangi cümle doğrudur?',secenekler:['Ahmet koştu yoruldu düştü.','Ahmet koştu, yoruldu, düştü.','Ahmet, koştu, yoruldu, düştü.','Ahmet koştu yoruldu, düştü.'],dogru:1,aciklama:'Sıralı eylemler virgülle ayrılır; özne ile yüklem arasına virgül konmaz.'},
+  {id:'s4',konu:'noktalama',zorluk:'Orta',tur:'mc',metin:"'Türkiye'nin üç büyük şehri ___ İstanbul, Ankara ve İzmir.' Boşluğa ne gelir?",secenekler:['virgül (,)','nokta (.)','iki nokta (:)','noktalı virgül (;)'],dogru:2,aciklama:'Liste veya açıklama yapılmadan önce iki nokta (:) kullanılır.'},
+  {id:'s5',konu:'birlesik',zorluk:'Orta',tur:'mc',metin:'Aşağıdakilerin hangisi bitişik yazılmalıdır?',secenekler:['demir kapı','gecekondu','taş köprü','fil dişi'],dogru:1,aciklama:'"Gecekondu" anlam kaymasına uğramış bir birleşik kelimedir.'},
+  {id:'s6',konu:'de-ki-mi',zorluk:'Kolay',tur:'mc',metin:'"Sen ___ gelecek misin?" cümlesinde boşluğa ne gelmelidir?',secenekler:['de','da','te','ta'],dogru:0,aciklama:'"de" burada bağlaç olarak ayrı yazılır.'},
+  {id:'s7',konu:'de-ki-mi',zorluk:'Zor',tur:'mc',metin:'"ki" kullanımının doğru olduğu hangisidir?',secenekler:['Biliyorki sen haklısın.','Öyle yoruldum ki uyuyakaldım.','Dünki hava güzeldi.','Bugünki ders zordu.'],dogru:1,aciklama:'"ki" bağlaç olarak ayrı yazılır. "dünkü/bugünkü" ise -ki ekiyle bitişik yazılır.'},
+  {id:'s8',konu:'de-ki-mi',zorluk:'Kolay',tur:'mc',metin:'Soru eki "mi" hangi cümlede doğru yazılmıştır?',secenekler:['Gidecekmisin?','Güzelmi?','Geldi mi?','Gördünüzmü?'],dogru:2,aciklama:'Soru eki "mi/mı/mu/mü" TDK kurallarına göre daima ayrı yazılır.'},
+  {id:'s9',konu:'buyuk-harf',zorluk:'Kolay',tur:'tf',metin:'"ankara güzel bir şehirdir." cümlesi büyük harf kuralına uygun yazılmıştır.',dyDogru:false,aciklama:'Cümleler büyük harfle başlar ve özel isimler büyük yazılır.'},
+  {id:'s10',konu:'noktalama',zorluk:'Orta',tur:'tf',metin:'Soru eki "mi" her zaman ayrı yazılır.',dyDogru:true,aciklama:'Doğru! Soru eki "mi/mı/mu/mü" TDK kurallarına göre her zaman ayrı yazılır.'},
+  {id:'s11',konu:'sayilar',zorluk:'Kolay',tur:'mc',metin:'Metin içinde sayı yazımında hangisi doğrudur?',secenekler:['5 öğrenci geldi.','beş öğrenci geldi.','Beş öğrenci geldi.','BEŞ öğrenci geldi.'],dogru:2,aciklama:'Metin içinde sayılar yazıyla ve cümle başında büyük harfle yazılır.'},
+  {id:'s12',konu:'kisaltma',zorluk:'Orta',tur:'mc',metin:'TDK kısaltmasına "-nın" eki getirildiğinde doğru yazım hangisidir?',secenekler:["TDK'nın","TDK'nin","TDK'nun","TDKnın"],dogru:0,aciklama:'Kısaltmalara getirilen ekler kesme işareti ile ayrılır. TDK sonrası "a" ünlüsü gerektirir.'},
+];
+
+const VARSAYILAN_KARIKATURLER=[
+  {id:'k1',konu:'noktalama',simge:'😱',gorselVeri:null,balon:'Virgülü unuttun, anlam değişti!',baslik:'Virgül Hayat Kurtarır!',aciklama:'"Yiyelim çocuklar" ile "Yiyelim, çocuklar" arasındaki fark bir virgüldür.',altyazi:'Virgül koyunca dünya değişir 😄'},
+  {id:'k2',konu:'buyuk-harf',simge:'🧑‍🏫',gorselVeri:null,balon:'Cümle büyük harfle başlar!',baslik:'Cümle Başı Büyük Harf',aciklama:'Her cümle büyük harfle başlar.',altyazi:''},
+  {id:'k3',konu:'de-ki-mi',simge:'😵',gorselVeri:null,balon:'"ki" bağlaç mı, ek mi?',baslik:'ki / Ki Kuralı',aciklama:'"Öyle yoruldum ki uyuyakaldım" — ki bağlaçtır, ayrı yazılır.',altyazi:''},
+];
+
+// ════════════════════════════════════════════════════════
+// DURUM
+// ════════════════════════════════════════════════════════
+let yoneticiSifre = LS.al('yd_yonetici_sifre','yazim2025');
+let kullanicilar = LS.al('yd_kullanicilar',{});
+let sorular = LS.al('yd_sorular',VARSAYILAN_SORULAR);
+let karikaturler = LS.al('yd_karikaturler',VARSAYILAN_KARIKATURLER);
+let haberler = LS.al('yd_haberler',[]);
+let icerikBloklari = LS.al('yd_bloklar',VARSAYILAN_BLOKLAR);
+let mevcutKullanici = null;
+let yoneticiMi = false;
+let kullanici_sonuclari = {};
+let kullanici_top_puan = 0;
+let sinav_puani=0,sinav_cevaplandi=[],sinav_siradaki=0,sinav_puan_eklendi=false,sinav_aktif_sorular=[];
+
+function kaydet(){
+  LS.kaydet('yd_yonetici_sifre',yoneticiSifre);
+  LS.kaydet('yd_kullanicilar',kullanicilar);
+  LS.kaydet('yd_sorular',sorular);
+  LS.kaydet('yd_karikaturler',karikaturler);
+  LS.kaydet('yd_haberler',haberler);
+  LS.kaydet('yd_bloklar',icerikBloklari);
+}
+
+// ════════════════════════════════════════════════════════
+// GİRİŞ / ÇIKIŞ
+// ════════════════════════════════════════════════════════
+function sekmeAc(sekme,btn){
+  document.querySelectorAll('.giris-sekme').forEach(b=>b.classList.remove('aktif'));
+  document.querySelectorAll('.giris-panel').forEach(p=>p.classList.remove('aktif'));
+  btn.classList.add('aktif');
+  document.getElementById(sekme+'-paneli').classList.add('aktif');
+}
+
+function girisUyarisi(msg){
+  const el=document.getElementById('giris-uyari');
+  el.textContent=msg;
+  setTimeout(()=>el.textContent='',4000);
+}
+
+function basitHash(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return h.toString();}
+
+function kullaniciKayit(){
+  const ad=document.getElementById('k-ad').value.trim();
+  const kadi=document.getElementById('k-kullanici').value.trim().toLowerCase();
+  const sinif=document.getElementById('k-sinif').value.trim();
+  const sifre=document.getElementById('k-sifre').value;
+  const sifre2=document.getElementById('k-sifre2').value;
+  if(!ad||!kadi||!sifre){girisUyarisi('Ad, kullanıcı adı ve şifre zorunludur!');return;}
+  if(!/^[a-z0-9_]{3,20}$/.test(kadi)){girisUyarisi('Kullanıcı adı 3-20 karakter, yalnızca harf/rakam/_');return;}
+  if(sifre.length<4){girisUyarisi('Şifre en az 4 karakter olmalı!');return;}
+  if(sifre!==sifre2){girisUyarisi('Şifreler eşleşmiyor!');return;}
+  if(kadi==='admin'){girisUyarisi('Bu kullanıcı adı kullanılamaz!');return;}
+  if(kullanicilar[kadi]){girisUyarisi('Bu kullanıcı adı zaten alınmış!');return;}
+  kullanicilar[kadi]={ad,sinif,sifreHash:basitHash(sifre),sonuclar:{},toplamPuan:0};
+  kaydet();
+  girisUyarisi('✅ Kayıt başarılı! Giriş yapabilirsiniz.');
+  sekmeAc('giris',document.querySelectorAll('.giris-sekme')[0]);
+}
+
+function kullaniciGiris(){
+  const kadi=document.getElementById('g-kullanici').value.trim().toLowerCase();
+  const sifre=document.getElementById('g-sifre').value;
+  if(!kadi||!sifre){girisUyarisi('Kullanıcı adı ve şifre giriniz!');return;}
+  const u=kullanicilar[kadi];
+  if(!u){girisUyarisi('❌ Kullanıcı bulunamadı!');return;}
+  if(u.sifreHash!==basitHash(sifre)){girisUyarisi('❌ Şifre hatalı!');return;}
+  mevcutKullanici={kadi,ad:u.ad,sinif:u.sinif};
+  kullanici_sonuclari=u.sonuclar||{};
+  kullanici_top_puan=u.toplamPuan||0;
+  yoneticiMi=false;
+  uygulamaBaslat();
+}
+
+function yoneticiGiris(){
+  const kadi=document.getElementById('y-kullanici').value.trim();
+  const sifre=document.getElementById('y-sifre').value;
+  if(kadi==='admin'&&sifre===yoneticiSifre){
+    mevcutKullanici={kadi:'admin',ad:'Yönetici',sinif:''};
+    yoneticiMi=true;
+    uygulamaBaslat();
+  } else girisUyarisi('❌ Kullanıcı adı veya şifre hatalı!');
+}
+
+function uygulamaBaslat(){
+  document.getElementById('giris-ekrani').style.display='none';
+  document.getElementById('uygulama').style.display='block';
+  document.getElementById('baslik-ad').textContent=mevcutKullanici.ad;
+  document.getElementById('baslik-puan').textContent=kullanici_top_puan;
+  document.getElementById('yonetici-nav-btn').style.display=yoneticiMi?'':'none';
+  if(yoneticiMi)document.body.classList.add('yonetici-giris');
+  else document.body.classList.remove('yonetici-giris');
+  const ht=document.getElementById('haber-tarih');
+  if(ht)ht.value=new Date().toISOString().split('T')[0];
+  hepsiniCiz();
+  sayfaGoster('anasayfa',document.querySelector('.nav-btn'));
+}
+
+function cikisYap(){
+  if(mevcutKullanici&&!yoneticiMi&&kullanicilar[mevcutKullanici.kadi]){
+    kullanicilar[mevcutKullanici.kadi].sonuclar=kullanici_sonuclari;
+    kullanicilar[mevcutKullanici.kadi].toplamPuan=kullanici_top_puan;
+    kaydet();
+  }
+  document.getElementById('giris-ekrani').style.display='flex';
+  document.getElementById('uygulama').style.display='none';
+  document.body.classList.remove('yonetici-giris');
+  mevcutKullanici=null;yoneticiMi=false;
+  kullanici_sonuclari={};kullanici_top_puan=0;
+}
+
+function yoneticiCikis(){
+  yoneticiMi=false;
+  document.body.classList.remove('yonetici-giris');
+  document.getElementById('yonetici-nav-btn').style.display='none';
+  sayfaGoster('anasayfa',document.querySelector('.nav-btn'));
+}
+
+// ════════════════════════════════════════════════════════
+// ÇİZİM
+// ════════════════════════════════════════════════════════
+function hepsiniCiz(){
+  konulariCiz();tdkCiz();
+  karikaturCiz('hepsi');haberleriCiz();
+  istatistikGuncelle();konuSecimleriniOlustur();
+  yoneticiKonuSecimleriniOlustur();
+}
+
+function istatistikGuncelle(){
+  document.getElementById('ist-soru').textContent=sorular.length;
+  document.getElementById('ist-karikatur').textContent=karikaturler.length;
+  document.getElementById('ist-puan').textContent=kullanici_top_puan;
+  document.getElementById('baslik-puan').textContent=kullanici_top_puan;
+}
+
+// ── KONULAR ──
+function konulariCiz(){
+  const bolumler=['topics-yazim','topics-noktalama'];
+  const altHarita={'topics-yazim':['buyuk-harf','sayilar','de-ki-mi','birlesik','kisaltma','karisik'],'topics-noktalama':['nokta','virgul','noktali-virgul','iki-nokta','uc-nokta','soru','unlem']};
+  const sekmeHarita={'topics-yazim':'yazim','topics-noktalama':'noktalama'};
+  bolumler.forEach(bol=>{
+    const sekme=sekmeHarita[bol];
+    const kenar=document.getElementById('kenar-'+sekme);
+    const icerikAlan=document.getElementById('icerik-'+sekme);
+    if(!kenar||!icerikAlan)return;
+    kenar.innerHTML='';icerikAlan.innerHTML='';
+    altHarita[bol].forEach((alt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='konu-baglanti'+(i===0?' aktif':'');
+      btn.textContent=KONU_ADLARI[alt]||alt;
+      btn.onclick=()=>altKonuGoster(sekme,alt);
+      kenar.appendChild(btn);
+      const div=document.createElement('div');
+      div.id='ksec-'+sekme+'-'+alt;
+      div.style.display=i===0?'block':'none';
+      icerikBloklari.filter(b=>b.bolum===bol&&b.alt===alt).forEach(bl=>div.appendChild(blokOlustur(bl,true)));
+      icerikAlan.appendChild(div);
+    });
+  });
+}
+
+function tdkCiz(){
+  ['tdk-yazim','tdk-noktalama'].forEach(bol=>{
+    const kap=document.getElementById(bol+'-bloklar');
+    if(!kap)return;
+    kap.innerHTML='';
+    icerikBloklari.filter(b=>b.bolum===bol).forEach(bl=>kap.appendChild(blokOlustur(bl,false)));
+  });
+}
+
+function blokOlustur(bl,yoneticiBar){
+  const div=document.createElement('div');div.className='icerik-blok';
+  if(yoneticiBar){
+    const bar=document.createElement('div');bar.className='ib-yonetici-bar';
+    bar.innerHTML=`<button class="ib-btn duzenle" onclick="blokDuzenle('${gv(bl.id)}')">✏️ Düzenle</button><button class="ib-btn sil" onclick="blokSil('${gv(bl.id)}')">🗑️ Sil</button>`;
+    div.appendChild(bar);
+  }
+  const h3=document.createElement('h3');h3.textContent=bl.baslik;div.appendChild(h3);
+  if(bl.tabloMu){
+    const p=document.createElement('p');p.style.cssText='font-size:0.83rem;color:var(--muted);margin-bottom:12px;font-family:"Lora",serif';p.textContent="TDK'ya göre doğru ve yanlış yazımlar:";div.appendChild(p);
+    const tbl=document.createElement('table');tbl.className='karsilastirma-tablo';tbl.innerHTML='<thead><tr><th>Yanlış ❌</th><th>Doğru ✅</th><th>Açıklama</th></tr></thead>';
+    const tbody=document.createElement('tbody');
+    KARISIK_TABLO.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="yanlis">${gv(r[0])}</td><td class="dogru">${gv(r[1])}</td><td>${gv(r[2])}</td>`;tbody.appendChild(tr);});
+    tbl.appendChild(tbody);div.appendChild(tbl);
+  } else {
+    const satirlar=(bl.icerik||'').split('\n').filter(l=>l.trim());
+    if(satirlar.length>1){const ul=document.createElement('ul');ul.className='kural-liste';satirlar.forEach(s=>{const li=document.createElement('li');li.textContent=s;ul.appendChild(li);});div.appendChild(ul);}
+    else if(satirlar.length===1){const p=document.createElement('p');p.style.cssText='font-family:"Lora",serif;line-height:1.7;font-size:0.95rem';p.textContent=satirlar[0];div.appendChild(p);}
+  }
+  if(bl.exDogru||bl.exYanlis){const ex=document.createElement('div');ex.className='ornek-kutu';if(bl.exDogru){const s=document.createElement('span');s.className='ornek-dogru';s.textContent='✅ '+bl.exDogru;ex.appendChild(s);ex.appendChild(document.createElement('br'));}if(bl.exYanlis){const s=document.createElement('span');s.className='ornek-yanlis';s.textContent='❌ '+bl.exYanlis;ex.appendChild(s);}div.appendChild(ex);}
+  if(bl.not){const nb=document.createElement('div');nb.className='not-kutu';nb.textContent=bl.not;div.appendChild(nb);}
+  if(bl.simge&&bl.balon){const mk=document.createElement('div');mk.className='mini-karikatur';mk.innerHTML=`<div class="mk-emoji">${gv(bl.simge)}</div><div class="mk-balon">${gv(bl.balon)}</div>`;div.appendChild(mk);}
+  return div;
+}
+
+function altKonuGoster(sekme,alt){
+  const alan=document.getElementById('konu-alan-'+sekme);if(!alan)return;
+  alan.querySelectorAll('[id^="ksec-'+sekme+'-"]').forEach(d=>d.style.display='none');
+  alan.querySelectorAll('.konu-baglanti').forEach(b=>b.classList.remove('aktif'));
+  const sec=document.getElementById('ksec-'+sekme+'-'+alt);if(sec)sec.style.display='block';
+  alan.querySelectorAll('.konu-baglanti').forEach(b=>{if(b.textContent.trim()===(KONU_ADLARI[alt]||alt))b.classList.add('aktif');});
+}
+
+// ── KARİKATÜRLER ──
+function karikaturCiz(filtre){
+  const gal=document.getElementById('karikatur-galerisi');
+  const yok=document.getElementById('karikatur-yok');
+  const liste=filtre==='hepsi'?karikaturler:karikaturler.filter(k=>k.konu===filtre);
+  if(!liste.length){gal.innerHTML='';yok.style.display='block';return;}
+  yok.style.display='none';
+  gal.innerHTML=liste.map(k=>`
+    <div class="karikatur-kart" onclick="buyukGorselAc('${gv(k.id)}')">
+      <div class="karikatur-resim">
+        ${k.gorselVeri?`<img src="${k.gorselVeri}" alt="${gv(k.baslik)}">`:`<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px;width:100%;height:100%;justify-content:center"><div style="font-size:4.5rem">${gv(k.simge||'📝')}</div>${k.balon?`<div style="background:#fff;color:#333;border-radius:9px;padding:7px 11px;font-size:0.72rem;font-weight:700;max-width:190px;text-align:center">${gv(k.balon)}</div>`:''}</div>`}
+      </div>
+      <div class="karikatur-bilgi">
+        <div class="karikatur-konu">${gv(KONU_ADLARI[k.konu]||k.konu)}</div>
+        <h3>${gv(k.baslik)}</h3>
+        <p>${gv(k.aciklama.substring(0,85))}${k.aciklama.length>85?'…':''}</p>
+      </div>
+    </div>`).join('');
+}
+
+function karikaturFiltre(f,btn){
+  document.querySelectorAll('.filtre-btn').forEach(b=>b.classList.remove('aktif'));
+  btn.classList.add('aktif');karikaturCiz(f);
+}
+
+function buyukGorselAc(id){
+  const k=karikaturler.find(x=>x.id===id);if(!k)return;
+  const bgr=document.getElementById('bg-resim');
+  if(k.gorselVeri){bgr.innerHTML=`<img src="${k.gorselVeri}" alt="${gv(k.baslik)}">`;}
+  else{bgr.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center;width:100%;height:100%"><div style="font-size:7rem">${gv(k.simge||'📝')}</div>${k.balon?`<div style="background:#fff;color:#333;border-radius:11px;padding:9px 15px;font-size:0.82rem;font-weight:700;max-width:240px;text-align:center">${gv(k.balon)}</div>`:''}</div>`;}
+  document.getElementById('bg-konu').textContent=KONU_ADLARI[k.konu]||k.konu;
+  document.getElementById('bg-baslik').textContent=k.baslik;
+  document.getElementById('bg-aciklama').textContent=k.aciklama;
+  const alt=document.getElementById('bg-altyazi');
+  if(k.altyazi){alt.textContent=k.altyazi;alt.style.display='block';}else alt.style.display='none';
+  document.getElementById('buyuk-gorsel').classList.add('acik');
+}
+function buyukGorselKapat(e){if(!e||e.target===document.getElementById('buyuk-gorsel'))document.getElementById('buyuk-gorsel').classList.remove('acik');}
+
+// ── HABERLER ──
+function haberleriCiz(){
+  const izgara=document.getElementById('haber-izgara');
+  const yok=document.getElementById('haber-yok');
+  if(!haberler.length){izgara.innerHTML='';yok.style.display='block';return;}
+  yok.style.display='none';izgara.innerHTML='';
+  [...haberler].reverse().forEach(h=>{
+    const kart=document.createElement('div');kart.className='haber-kart';
+    if(h.etiket){const e=document.createElement('div');e.className='haber-etiket';e.textContent=h.etiket;kart.appendChild(e);}
+    const tarih=document.createElement('div');tarih.className='haber-tarih';tarih.textContent='📅 '+(h.tarih||'Tarih belirtilmedi');kart.appendChild(tarih);
+    const h3=document.createElement('h3');h3.textContent=h.baslik;kart.appendChild(h3);
+    const p=document.createElement('p');p.textContent=h.icerik;kart.appendChild(p);
+    izgara.appendChild(kart);
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// GEZİNME
+// ════════════════════════════════════════════════════════
+function sayfaGoster(id,btn){
+  document.querySelectorAll('.sayfa').forEach(p=>p.classList.remove('aktif'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('aktif'));
+  document.getElementById('sayfa-'+id).classList.add('aktif');
+  if(btn)btn.classList.add('aktif');
+  if(id==='performans')performansCiz();
+  if(id==='sinav')konuSecimleriniOlustur();
+  if(id==='yonetici'){yoneticiKonuSecimleriniOlustur();yoneticiPanel('soru-ekle',document.querySelector('.yk-btn'));}
+  window.scrollTo(0,0);
+}
+
+function konuSekmesi(sekme,btn){
+  document.querySelectorAll('.konu-sekme').forEach(b=>b.classList.remove('aktif'));
+  document.querySelectorAll('.konu-alan').forEach(a=>a.classList.remove('aktif'));
+  btn.classList.add('aktif');
+  document.getElementById('konu-alan-'+sekme).classList.add('aktif');
+}
+
+function tdkSekmesi(id,btn){
+  document.querySelectorAll('.tdk-bolum').forEach(s=>s.classList.remove('aktif'));
+  document.querySelectorAll('.tdk-sekme').forEach(b=>b.classList.remove('aktif'));
+  document.getElementById('tdk-'+id).classList.add('aktif');btn.classList.add('aktif');
+}
+
+function konuyaGit(sekme,alt){
+  sayfaGoster('konular',document.querySelectorAll('.nav-btn')[1]);
+  setTimeout(()=>{konuSekmesi(sekme,document.querySelectorAll('.konu-sekme')[sekme==='yazim'?0:1]);setTimeout(()=>altKonuGoster(sekme,alt),60);},60);
+}
+
+// ════════════════════════════════════════════════════════
+// SINAV
+// ════════════════════════════════════════════════════════
+function konuSecimleriniOlustur(){
+  const kap=document.getElementById('konu-secimler');if(!kap)return;
+  const konular=[...new Set(sorular.map(s=>s.konu))];
+  kap.innerHTML=konular.map(k=>`<label class="sinav-secim"><input type="checkbox" class="konu-sec" value="${gv(k)}" checked> ${gv(KONU_ADLARI[k]||k)}</label>`).join('');
+}
+
+function sinavBaslat(){
+  const secKonular=[...document.querySelectorAll('.konu-sec:checked')].map(c=>c.value);
+  const secZorluklar=[...document.querySelectorAll('.zorluk-sec:checked')].map(c=>c.value);
+  const secTipler=[...document.querySelectorAll('.tip-sec:checked')].map(c=>c.value);
+  const sayiVal=document.getElementById('soru-sayisi').value;
+  const uyari=document.getElementById('sinav-bas-uyari');
+  if(!secKonular.length){uyari.textContent='En az bir konu seçmelisin!';return;}
+  if(!secZorluklar.length){uyari.textContent='En az bir zorluk seviyesi seçmelisin!';return;}
+  if(!secTipler.length){uyari.textContent='En az bir soru türü seçmelisin!';return;}
+  uyari.textContent='';
+  let havuz=sorular.filter(s=>secKonular.includes(s.konu)&&secZorluklar.includes(s.zorluk)&&secTipler.includes(s.tur||'mc'));
+  if(!havuz.length){uyari.textContent='Seçilen kriterlere uygun soru bulunamadı!';return;}
+  havuz=havuz.sort(()=>Math.random()-.5);
+  if(sayiVal!=='hepsi')havuz=havuz.slice(0,parseInt(sayiVal));
+  sinav_aktif_sorular=havuz;sinav_siradaki=0;sinav_puani=0;
+  sinav_cevaplandi=[];sinav_puan_eklendi=false;
+  document.getElementById('sinav-baslangic').style.display='none';
+  document.getElementById('sinav-aktif').style.display='block';
+  document.getElementById('sinav-bitti').style.display='none';
+  document.getElementById('sinav-top').textContent=sinav_aktif_sorular.length;
+  soruCiz();
+}
+
+function sinavaBas(){
+  document.getElementById('sinav-baslangic').style.display='block';
+  document.getElementById('sinav-aktif').style.display='none';
+}
+
+function sinavBitir(){
+  document.getElementById('sinav-kap').style.display='none';
+  document.getElementById('sinav-bitti').style.display='block';
+  document.getElementById('sinav-son').textContent=sinav_puani;
+  if(!sinav_puan_eklendi){
+    sinav_puan_eklendi=true;
+    kullanici_top_puan+=sinav_puani;
+    if(mevcutKullanici&&!yoneticiMi&&kullanicilar[mevcutKullanici.kadi]){
+      kullanicilar[mevcutKullanici.kadi].toplamPuan=kullanici_top_puan;
+      kullanicilar[mevcutKullanici.kadi].sonuclar=kullanici_sonuclari;
+      kaydet();
+    }
+    istatistikGuncelle();
+  }
+}
+
+function soruCiz(){
+  const kap=document.getElementById('sinav-kap');
+  if(sinav_siradaki>=sinav_aktif_sorular.length){sinavBitir();return;}
+  kap.style.display='block';
+  const s=sinav_aktif_sorular[sinav_siradaki];
+  const cvp=sinav_cevaplandi[sinav_siradaki];
+  const bitti=cvp!==undefined;
+  const yuzde=Math.round((sinav_siradaki/sinav_aktif_sorular.length)*100);
+  document.getElementById('sinav-no').textContent=sinav_siradaki+1;
+  document.getElementById('sinav-yuzde').textContent=yuzde+'%';
+  document.getElementById('sinav-dolu').style.width=yuzde+'%';
+  document.getElementById('sinav-puan').textContent=sinav_puani;
+  const dyMi=s.tur==='tf';
+  let secHTML=dyMi
+    ?`<div class="secenekler dy-secenekler">
+        <button class="secenek ${bitti?((s.dyDogru?1:0)===1?'dogru':(cvp===1?'yanlis':'')):''}
+          " onclick="soruCevapla(1)" ${bitti?'disabled':''}>✅ Doğru</button>
+        <button class="secenek ${bitti?((s.dyDogru?1:0)===0?'dogru':(cvp===0?'yanlis':'')):''}
+          " onclick="soruCevapla(0)" ${bitti?'disabled':''}>❌ Yanlış</button>
+      </div>`
+    :`<div class="secenekler">${(s.secenekler||[]).map((o,i)=>`
+        <button class="secenek ${bitti?(i===s.dogru?'dogru':(i===cvp?'yanlis':'')):''}
+          " onclick="soruCevapla(${i})" ${bitti?'disabled':''}>
+          <span style="color:var(--accent);font-weight:800;margin-right:5px">${'ABCD'[i]})</span>${gv(o)}
+        </button>`).join('')}</div>`;
+  kap.innerHTML=`
+    <div class="soru-kart">
+      <div class="soru-meta">
+        <span class="rozet rozet-konu">${gv(KONU_ADLARI[s.konu]||s.konu)}</span>
+        <span class="rozet rozet-zorluk">${gv(s.zorluk)}</span>
+        <span class="rozet rozet-tip">${dyMi?'Doğru/Yanlış':'Çoktan Seçmeli'}</span>
+      </div>
+      <div class="soru-metin">${sinav_siradaki+1}. ${gv(s.metin)}</div>
+      ${secHTML}
+      <div class="aciklama ${bitti?'goster':''}">💡 ${gv(s.aciklama||'')}</div>
+    </div>
+    <div class="soru-eylemler">
+      ${sinav_siradaki>0?`<button class="btn btn-cerceve btn-kucuk" onclick="oncekiSoru()">← Önceki</button>`:''}
+      ${bitti?`<button class="btn btn-yesil btn-kucuk" onclick="sonrakiSoru()">Sonraki →</button>`:''}
+    </div>`;
+}
+
+function soruCevapla(i){
+  if(sinav_cevaplandi[sinav_siradaki]!==undefined)return;
+  const s=sinav_aktif_sorular[sinav_siradaki];
+  sinav_cevaplandi[sinav_siradaki]=i;
+  if(!kullanici_sonuclari[s.konu])kullanici_sonuclari[s.konu]={dogru:0,yanlis:0};
+  const dogru=s.tur==='tf'?(i===(s.dyDogru?1:0)):(i===s.dogru);
+  if(dogru){sinav_puani+=10;kullanici_sonuclari[s.konu].dogru++;}
+  else kullanici_sonuclari[s.konu].yanlis++;
+  soruCiz();
+}
+
+function sonrakiSoru(){if(sinav_siradaki<sinav_aktif_sorular.length-1){sinav_siradaki++;soruCiz();}else sinavBitir();}
+function oncekiSoru(){if(sinav_siradaki>0){sinav_siradaki--;soruCiz();}}
+
+// ════════════════════════════════════════════════════════
+// PERFORMANS
+// ════════════════════════════════════════════════════════
+function performansCiz(){
+  let td=0,ty=0;Object.values(kullanici_sonuclari).forEach(r=>{td+=r.dogru;ty+=r.yanlis;});
+  const top=td+ty,oran=top>0?Math.round(td/top*100):0;
+  document.getElementById('performans-ist').innerHTML=`
+    <div class="performans-kart"><div class="performans-sayi" style="color:var(--accent)">${top}</div><div class="performans-etiket">Çözülen Soru</div></div>
+    <div class="performans-kart"><div class="performans-sayi" style="color:var(--green)">${td}</div><div class="performans-etiket">Doğru</div></div>
+    <div class="performans-kart"><div class="performans-sayi" style="color:var(--red)">${ty}</div><div class="performans-etiket">Yanlış</div></div>
+    <div class="performans-kart"><div class="performans-sayi" style="color:${oran>=70?'var(--green)':oran>=40?'var(--accent)':'var(--red)'}">${oran}%</div><div class="performans-etiket">Başarı Oranı</div></div>`;
+  const konular=[...new Set(sorular.map(s=>s.konu))];
+  let barlar='<div class="liste-kart"><h3>Konulara Göre Başarı</h3>';
+  konular.forEach(k=>{
+    const r=kullanici_sonuclari[k]||{dogru:0,yanlis:0};const t=r.dogru+r.yanlis;
+    const p=t>0?Math.round(r.dogru/t*100):null;
+    const cls=p===null?'':p>=70?'dolu-guclu':p>=40?'dolu-orta':'dolu-zayif';
+    barlar+=`<div class="konu-bar-sar"><div class="kbs-etiket"><span>${gv(KONU_ADLARI[k]||k)}</span><span>${p!==null?p+'%':'Henüz çözülmedi'}</span></div><div class="kbs-bar"><div class="kbs-dolu ${cls}" style="width:${p||0}%"></div></div></div>`;
+  });
+  barlar+='</div>';
+  let oneriler='<div class="liste-kart"><h3>💡 Öneriler</h3>';let var_mi=false;
+  konular.forEach(k=>{
+    const r=kullanici_sonuclari[k]||{dogru:0,yanlis:0};const t=r.dogru+r.yanlis;
+    const p=t>0?Math.round(r.dogru/t*100):null;
+    if(p!==null&&p<60){var_mi=true;oneriler+=`<div class="oneri-madde"><div class="oneri-ikon">⚠️</div><div><div class="oneri-baslik">${gv(KONU_ADLARI[k]||k)} konusunu tekrar et</div><div class="oneri-metin">Başarı oranın %${p}. Konu anlatımı bölümünü incele.</div></div></div>`;}
+  });
+  if(!var_mi&&top===0)oneriler+='<div class="oneri-madde"><div class="oneri-ikon">👋</div><div><div class="oneri-baslik">Henüz sınav çözmedin</div><div class="oneri-metin">Sınav bölümünden soru çöz!</div></div></div>';
+  else if(!var_mi)oneriler+='<div class="oneri-madde"><div class="oneri-ikon">🎉</div><div><div class="oneri-baslik">Tüm konularda başarılısın!</div><div class="oneri-metin">Harika iş çıkardın!</div></div></div>';
+  oneriler+='</div>';
+  document.getElementById('performans-detay').innerHTML=barlar+oneriler;
+}
+
+// ════════════════════════════════════════════════════════
+// YÖNETİCİ
+// ════════════════════════════════════════════════════════
+function yoneticiPanel(id,btn){
+  document.querySelectorAll('.yonetici-panel').forEach(p=>p.classList.remove('aktif'));
+  document.querySelectorAll('.yk-btn').forEach(b=>b.classList.remove('aktif'));
+  const panel=document.getElementById('panel-'+id);if(panel)panel.classList.add('aktif');
+  if(btn)btn.classList.add('aktif');
+  if(id==='soru-liste')soruListesiCiz();
+  if(id==='karikatur-liste')karikaturListesiCiz();
+  if(id==='blok-liste')blokListesiCiz();
+  if(id==='haber-liste')haberListesiCiz();
+  if(id==='kullanicilar')kullaniciListesiCiz();
+}
+
+function yoneticiKonuSecimleriniOlustur(){
+  const sinav_konular=Object.keys(KONU_ADLARI).filter(k=>!['nokta','virgul','noktali-virgul','iki-nokta','uc-nokta','soru','unlem'].includes(k));
+  ['soru-konu','karikatur-konu'].forEach(sid=>{
+    const sel=document.getElementById(sid);if(!sel)return;
+    const liste=sid==='karikatur-konu'?Object.keys(KONU_ADLARI):sinav_konular;
+    sel.innerHTML=liste.map(k=>`<option value="${gv(k)}">${gv(KONU_ADLARI[k]||k)}</option>`).join('');
+  });
+}
+
+function bildirimGoster(id,msg,tip){
+  const el=document.getElementById(id);if(!el)return;
+  el.className='bildirim '+(tip==='tamam'?'tamam':'hata');
+  el.textContent=msg;
+  setTimeout(()=>el.className='bildirim',3500);
+}
+
+// ── SORU ──
+function soruTuru(){
+  const t=document.getElementById('soru-tur').value;
+  document.getElementById('mc-secenekler').style.display=t==='mc'?'block':'none';
+  document.getElementById('tf-secenekler').style.display=t==='tf'?'block':'none';
+}
+
+function soruFormTemizle(){
+  document.getElementById('soru-duzenle-id').value='';
+  document.getElementById('soru-panel-baslik').textContent='➕ Yeni Soru Ekle';
+  document.getElementById('soru-metin').value='';
+  document.getElementById('soru-aciklama').value='';
+  document.getElementById('soru-iptal-btn').style.display='none';
+  ['sec-a','sec-b','sec-c','sec-d'].forEach(id=>document.getElementById(id).value='');
+  const cr=document.querySelector('input[name="dogru-cevap"]:checked');if(cr)cr.checked=false;
+  const dy=document.querySelector('input[name="dy-cevap"]:checked');if(dy)dy.checked=false;
+}
+
+function soruKaydet(){
+  const metin=document.getElementById('soru-metin').value.trim();
+  const tur=document.getElementById('soru-tur').value;
+  const duzenleId=document.getElementById('soru-duzenle-id').value;
+  if(!metin){bildirimGoster('bil-soru','❌ Soru metni zorunludur!','hata');return;}
+  const id=duzenleId||('s'+Date.now());
+  const soru={id,konu:document.getElementById('soru-konu').value,zorluk:document.getElementById('soru-zorluk').value,tur,metin,aciklama:document.getElementById('soru-aciklama').value.trim()||'Açıklama eklenmemiş.'};
+  if(tur==='mc'){
+    const secs=['sec-a','sec-b','sec-c','sec-d'].map(x=>document.getElementById(x).value.trim());
+    const dc=document.querySelector('input[name="dogru-cevap"]:checked');
+    if(secs.some(o=>!o)||!dc){bildirimGoster('bil-soru','❌ Tüm seçenekleri ve doğru cevabı seçin!','hata');return;}
+    soru.secenekler=secs;soru.dogru=parseInt(dc.value);
+  } else {
+    const dy=document.querySelector('input[name="dy-cevap"]:checked');
+    if(!dy){bildirimGoster('bil-soru','❌ Doğru/Yanlış cevabı seçin!','hata');return;}
+    soru.dyDogru=dy.value==='1';
+  }
+  if(duzenleId){const idx=sorular.findIndex(s=>s.id===duzenleId);if(idx>-1)sorular[idx]=soru;}
+  else sorular.push(soru);
+  kaydet();istatistikGuncelle();konuSecimleriniOlustur();
+  bildirimGoster('bil-soru',duzenleId?'✅ Soru güncellendi!':'✅ Soru eklendi!','tamam');
+  soruFormTemizle();
+}
+
+function soruDuzenle(id){
+  const s=sorular.find(x=>x.id===id);if(!s)return;
+  yoneticiPanel('soru-ekle',document.querySelector('.yk-btn'));
+  document.getElementById('soru-duzenle-id').value=s.id;
+  document.getElementById('soru-panel-baslik').textContent='✏️ Soruyu Düzenle';
+  document.getElementById('soru-konu').value=s.konu;
+  document.getElementById('soru-zorluk').value=s.zorluk;
+  document.getElementById('soru-tur').value=s.tur||'mc';
+  soruTuru();
+  document.getElementById('soru-metin').value=s.metin;
+  document.getElementById('soru-aciklama').value=s.aciklama||'';
+  if(s.tur==='mc'&&s.secenekler){
+    ['sec-a','sec-b','sec-c','sec-d'].forEach((id2,i)=>document.getElementById(id2).value=s.secenekler[i]||'');
+    document.querySelectorAll('input[name="dogru-cevap"]').forEach(r=>{if(parseInt(r.value)===s.dogru)r.checked=true;});
+  }
+  if(s.tur==='tf'){document.querySelectorAll('input[name="dy-cevap"]').forEach(r=>{r.checked=(r.value==='1')===s.dyDogru;});}
+  document.getElementById('soru-iptal-btn').style.display='inline-block';
+  sayfaGoster('yonetici',document.querySelector('.yonetici-nav'));
+}
+
+function soruSil(id){
+  if(!confirm('Bu soruyu silmek istiyor musunuz?'))return;
+  sorular=sorular.filter(s=>s.id!==id);
+  kaydet();soruListesiCiz();istatistikGuncelle();
+}
+
+function soruListesiCiz(){
+  const kap=document.getElementById('soru-liste-kap');if(!kap)return;
+  if(!sorular.length){kap.innerHTML='<p style="color:var(--muted)">Henüz soru yok.</p>';return;}
+  kap.innerHTML=sorular.map(s=>`
+    <div class="liste-madde">
+      <div class="liste-madde-metin">
+        <div class="lm-ust">${gv(KONU_ADLARI[s.konu]||s.konu)} · ${gv(s.zorluk)} · ${s.tur==='tf'?'Doğru/Yanlış':'Çoktan Seçmeli'}</div>
+        <div class="lm-ana">${gv(s.metin.substring(0,75))}${s.metin.length>75?'…':''}</div>
+      </div>
+      <div class="liste-eylemler">
+        <button class="eylem-btn duzenle" onclick="soruDuzenle('${gv(s.id)}')">✏️</button>
+        <button class="eylem-btn sil" onclick="soruSil('${gv(s.id)}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── KARİKATÜR ──
+function gorselOnizle(inp){
+  if(!inp.files[0])return;
+  if(inp.files[0].size>10*1024*1024){alert('Dosya 10MB\'dan küçük olmalıdır!');inp.value='';return;}
+  const reader=new FileReader();
+  reader.onload=e=>{const on=document.getElementById('karikatur-onizleme');on.src=e.target.result;on.style.display='block';};
+  reader.readAsDataURL(inp.files[0]);
+}
+
+function karikaturFormTemizle(){
+  document.getElementById('karikatur-duzenle-id').value='';
+  document.getElementById('karikatur-panel-baslik').textContent='🖼️ Karikatür Ekle';
+  ['karikatur-simge','karikatur-balon','karikatur-baslik','karikatur-aciklama','karikatur-altyazi'].forEach(id=>document.getElementById(id).value='');
+  const on=document.getElementById('karikatur-onizleme');on.style.display='none';on.src='';
+  document.getElementById('karikatur-dosya').value='';
+  document.getElementById('karikatur-iptal-btn').style.display='none';
+}
+
+function karikaturKaydet(){
+  const baslik=document.getElementById('karikatur-baslik').value.trim();
+  const aciklama=document.getElementById('karikatur-aciklama').value.trim();
+  const duzenleId=document.getElementById('karikatur-duzenle-id').value;
+  if(!baslik||!aciklama){bildirimGoster('bil-karikatur','❌ Başlık ve açıklama zorunludur!','hata');return;}
+  const on=document.getElementById('karikatur-onizleme');
+  const gorselVeri=(on.style.display!=='none'&&on.src&&on.src!==window.location.href)?on.src:null;
+  const id=duzenleId||('k'+Date.now());
+  const k={id,konu:document.getElementById('karikatur-konu').value,simge:document.getElementById('karikatur-simge').value.trim()||'📝',gorselVeri,balon:document.getElementById('karikatur-balon').value.trim(),baslik,aciklama,altyazi:document.getElementById('karikatur-altyazi').value.trim()};
+  if(duzenleId){const idx=karikaturler.findIndex(x=>x.id===duzenleId);if(idx>-1)karikaturler[idx]=k;}
+  else karikaturler.push(k);
+  kaydet();karikaturCiz('hepsi');istatistikGuncelle();
+  bildirimGoster('bil-karikatur',duzenleId?'✅ Karikatür güncellendi!':'✅ Karikatür eklendi!','tamam');
+  karikaturFormTemizle();
+}
+
+function karikaturDuzenle(id){
+  const k=karikaturler.find(x=>x.id===id);if(!k)return;
+  yoneticiPanel('karikatur-ekle',null);
+  document.getElementById('karikatur-duzenle-id').value=k.id;
+  document.getElementById('karikatur-panel-baslik').textContent='✏️ Karikatürü Düzenle';
+  document.getElementById('karikatur-konu').value=k.konu;
+  document.getElementById('karikatur-simge').value=k.simge||'';
+  document.getElementById('karikatur-balon').value=k.balon||'';
+  document.getElementById('karikatur-baslik').value=k.baslik;
+  document.getElementById('karikatur-aciklama').value=k.aciklama;
+  document.getElementById('karikatur-altyazi').value=k.altyazi||'';
+  if(k.gorselVeri){const on=document.getElementById('karikatur-onizleme');on.src=k.gorselVeri;on.style.display='block';}
+  document.getElementById('karikatur-iptal-btn').style.display='inline-block';
+  sayfaGoster('yonetici',document.querySelector('.yonetici-nav'));
+}
+
+function karikaturSil(id){
+  if(!confirm('Bu karikatürü silmek istiyor musunuz?'))return;
+  karikaturler=karikaturler.filter(k=>k.id!==id);
+  kaydet();karikaturListesiCiz();karikaturCiz('hepsi');istatistikGuncelle();
+}
+
+function karikaturListesiCiz(){
+  const kap=document.getElementById('karikatur-liste-kap');if(!kap)return;
+  if(!karikaturler.length){kap.innerHTML='<p style="color:var(--muted)">Henüz karikatür yok.</p>';return;}
+  kap.innerHTML=karikaturler.map(k=>`
+    <div class="liste-madde">
+      <div class="liste-madde-metin"><div class="lm-ust">${gv(KONU_ADLARI[k.konu]||k.konu)}</div><div class="lm-ana">${gv(k.simge)} ${gv(k.baslik)}</div></div>
+      <div class="liste-eylemler">
+        <button class="eylem-btn duzenle" onclick="karikaturDuzenle('${gv(k.id)}')">✏️</button>
+        <button class="eylem-btn sil" onclick="karikaturSil('${gv(k.id)}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── BLOK ──
+function blokFormTemizle(){
+  document.getElementById('blok-duzenle-id').value='';
+  document.getElementById('blok-panel-baslik').textContent='📝 İçerik Bloğu Ekle';
+  ['blok-baslik','blok-icerik','blok-dogru','blok-yanlis','blok-simge','blok-balon','blok-not'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('blok-iptal-btn').style.display='none';
+}
+
+function blokKaydet(){
+  const baslik=document.getElementById('blok-baslik').value.trim();
+  const icerik=document.getElementById('blok-icerik').value.trim();
+  const duzenleId=document.getElementById('blok-duzenle-id').value;
+  if(!baslik||!icerik){bildirimGoster('bil-blok','❌ Başlık ve içerik zorunludur!','hata');return;}
+  const id=duzenleId||('b'+Date.now());
+  const bl={id,bolum:document.getElementById('blok-bolum').value,alt:document.getElementById('blok-alt').value,baslik,icerik,exDogru:document.getElementById('blok-dogru').value.trim(),exYanlis:document.getElementById('blok-yanlis').value.trim(),simge:document.getElementById('blok-simge').value.trim(),balon:document.getElementById('blok-balon').value.trim(),not:document.getElementById('blok-not').value.trim(),tabloMu:false};
+  if(duzenleId){const idx=icerikBloklari.findIndex(b=>b.id===duzenleId);if(idx>-1)icerikBloklari[idx]=bl;}
+  else icerikBloklari.push(bl);
+  kaydet();konulariCiz();tdkCiz();
+  bildirimGoster('bil-blok',duzenleId?'✅ Blok güncellendi!':'✅ Blok eklendi!','tamam');
+  blokFormTemizle();
+}
+
+function blokDuzenle(id){
+  const bl=icerikBloklari.find(b=>b.id===id);if(!bl)return;
+  yoneticiPanel('blok-ekle',null);
+  document.getElementById('blok-duzenle-id').value=bl.id;
+  document.getElementById('blok-panel-baslik').textContent='✏️ Bloğu Düzenle';
+  document.getElementById('blok-bolum').value=bl.bolum;
+  document.getElementById('blok-alt').value=bl.alt;
+  document.getElementById('blok-baslik').value=bl.baslik;
+  document.getElementById('blok-icerik').value=bl.icerik;
+  document.getElementById('blok-dogru').value=bl.exDogru||'';
+  document.getElementById('blok-yanlis').value=bl.exYanlis||'';
+  document.getElementById('blok-simge').value=bl.simge||'';
+  document.getElementById('blok-balon').value=bl.balon||'';
+  document.getElementById('blok-not').value=bl.not||'';
+  document.getElementById('blok-iptal-btn').style.display='inline-block';
+  sayfaGoster('yonetici',document.querySelector('.yonetici-nav'));
+}
+
+function blokSil(id){
+  if(!confirm('Bu içerik bloğunu silmek istiyor musunuz?'))return;
+  icerikBloklari=icerikBloklari.filter(b=>b.id!==id);
+  kaydet();konulariCiz();tdkCiz();
+}
+
+function blokListesiCiz(){
+  const kap=document.getElementById('blok-liste-kap');if(!kap)return;
+  if(!icerikBloklari.length){kap.innerHTML='<p style="color:var(--muted)">Henüz blok yok.</p>';return;}
+  kap.innerHTML=icerikBloklari.map(bl=>`
+    <div class="liste-madde">
+      <div class="liste-madde-metin">
+        <div class="lm-ust">${gv(bl.bolum)} › ${gv(bl.alt)}</div>
+        <div class="lm-ana">${gv(bl.baslik.substring(0,70))}</div>
+      </div>
+      <div class="liste-eylemler">
+        <button class="eylem-btn duzenle" onclick="blokDuzenle('${gv(bl.id)}')">✏️</button>
+        <button class="eylem-btn sil" onclick="blokSil('${gv(bl.id)}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── HABER ──
+function haberFormTemizle(){
+  document.getElementById('haber-duzenle-id').value='';
+  document.getElementById('haber-panel-baslik').textContent='📰 Haber Ekle';
+  ['haber-baslik','haber-icerik','haber-etiket'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('haber-iptal-btn').style.display='none';
+}
+
+function haberKaydet(){
+  const baslik=document.getElementById('haber-baslik').value.trim();
+  const icerik=document.getElementById('haber-icerik').value.trim();
+  const duzenleId=document.getElementById('haber-duzenle-id').value;
+  if(!baslik||!icerik){bildirimGoster('bil-haber','❌ Başlık ve içerik zorunludur!','hata');return;}
+  const id=duzenleId||('h'+Date.now());
+  const h={id,baslik,icerik,etiket:document.getElementById('haber-etiket').value.trim(),tarih:document.getElementById('haber-tarih').value};
+  if(duzenleId){const idx=haberler.findIndex(x=>x.id===duzenleId);if(idx>-1)haberler[idx]=h;}
+  else haberler.push(h);
+  kaydet();haberleriCiz();haberListesiCiz();
+  bildirimGoster('bil-haber',duzenleId?'✅ Haber güncellendi!':'✅ Haber yayınlandı!','tamam');
+  haberFormTemizle();
+}
+
+function haberDuzenle(id){
+  const h=haberler.find(x=>x.id===id);if(!h)return;
+  yoneticiPanel('haber-ekle',null);
+  document.getElementById('haber-duzenle-id').value=h.id;
+  document.getElementById('haber-panel-baslik').textContent='✏️ Haberi Düzenle';
+  document.getElementById('haber-baslik').value=h.baslik;
+  document.getElementById('haber-icerik').value=h.icerik;
+  document.getElementById('haber-etiket').value=h.etiket||'';
+  document.getElementById('haber-tarih').value=h.tarih||'';
+  document.getElementById('haber-iptal-btn').style.display='inline-block';
+  sayfaGoster('yonetici',document.querySelector('.yonetici-nav'));
+}
+
+function haberSil(id){
+  if(!confirm('Bu haberi silmek istiyor musunuz?'))return;
+  haberler=haberler.filter(h=>h.id!==id);
+  kaydet();haberleriCiz();haberListesiCiz();
+}
+
+function haberListesiCiz(){
+  const kap=document.getElementById('haber-liste-kap');if(!kap)return;
+  if(!haberler.length){kap.innerHTML='<p style="color:var(--muted)">Henüz haber yok.</p>';return;}
+  kap.innerHTML=[...haberler].reverse().map(h=>`
+    <div class="liste-madde">
+      <div class="liste-madde-metin"><div class="lm-ust">${gv(h.etiket||'Haber')} · ${gv(h.tarih||'')}</div><div class="lm-ana">${gv(h.baslik.substring(0,70))}</div></div>
+      <div class="liste-eylemler">
+        <button class="eylem-btn duzenle" onclick="haberDuzenle('${gv(h.id)}')">✏️</button>
+        <button class="eylem-btn sil" onclick="haberSil('${gv(h.id)}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── KULLANICILAR ──
+function kullaniciListesiCiz(){
+  const kap=document.getElementById('kullanici-liste-kap');if(!kap)return;
+  const liste=Object.entries(kullanicilar);
+  if(!liste.length){kap.innerHTML='<p style="color:var(--muted)">Henüz kayıtlı kullanıcı yok.</p>';return;}
+  kap.innerHTML=liste.map(([kadi,u])=>`
+    <div class="liste-madde">
+      <div class="liste-madde-metin">
+        <div class="lm-ust">${gv(u.sinif||'Sınıf belirtilmemiş')} · ⭐ ${u.toplamPuan||0} puan</div>
+        <div class="lm-ana">👤 ${gv(u.ad)} <span style="color:var(--muted);font-size:0.78rem">@${gv(kadi)}</span></div>
+      </div>
+      <div class="liste-eylemler"><button class="eylem-btn sil" onclick="kullaniciSil('${gv(kadi)}')">🗑️</button></div>
+    </div>`).join('');
+}
+
+function kullaniciSil(kadi){
+  if(!confirm(kadi+' kullanıcısını silmek istiyor musunuz?'))return;
+  delete kullanicilar[kadi];kaydet();kullaniciListesiCiz();
+}
+
+// ── ŞİFRE ──
+function sifreDegistir(){
+  const eski=document.getElementById('sifre-eski').value;
+  const yeni=document.getElementById('sifre-yeni').value;
+  const yeni2=document.getElementById('sifre-yeni2').value;
+  if(eski!==yoneticiSifre){bildirimGoster('bil-sifre','❌ Mevcut şifre hatalı!','hata');return;}
+  if(yeni.length<4){bildirimGoster('bil-sifre','❌ Yeni şifre en az 4 karakter!','hata');return;}
+  if(yeni!==yeni2){bildirimGoster('bil-sifre','❌ Yeni şifreler eşleşmiyor!','hata');return;}
+  yoneticiSifre=yeni;kaydet();
+  bildirimGoster('bil-sifre','✅ Şifre değiştirildi!','tamam');
+  ['sifre-eski','sifre-yeni','sifre-yeni2'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ── SIFIRLA ──
+function blokSifirla(){if(!confirm('İçerik blokları varsayılana sıfırlanacak. Emin misiniz?'))return;icerikBloklari=[...VARSAYILAN_BLOKLAR];kaydet();konulariCiz();tdkCiz();alert('✅ Bloklar sıfırlandı.');}
+function soruSifirla(){if(!confirm('Sorular varsayılana sıfırlanacak. Emin misiniz?'))return;sorular=[...VARSAYILAN_SORULAR];kaydet();istatistikGuncelle();konuSecimleriniOlustur();alert('✅ Sorular sıfırlandı.');}
+function karikaturSifirla(){if(!confirm('Karikatürler varsayılana sıfırlanacak. Emin misiniz?'))return;karikaturler=[...VARSAYILAN_KARIKATURLER];kaydet();karikaturCiz('hepsi');istatistikGuncelle();alert('✅ Karikatürler sıfırlandı.');}
+function hepsiniSifirla(){if(!confirm('TÜM VERİLER silinecek! Emin misiniz?'))return;if(!confirm('Son onay: Tüm veriler silinecek!'))return;localStorage.clear();location.reload();}
+</script>
+</body>
+</html>
